@@ -75,6 +75,7 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.example.mymovieapp.R
 import com.example.mymovieapp.clases.BarItem
+import com.example.mymovieapp.data.repository.MoviesRepository
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
@@ -91,6 +92,13 @@ val colorGray = Color(0xFF92929D)
 @Preview
 fun MediaScreen(modifier: Modifier = Modifier) {
     var text by rememberSaveable { mutableStateOf("") }
+
+    val scope = rememberCoroutineScope()
+    
+    
+    scope.launch {
+        MoviesRepository.getPopularMovies()
+    }
 
     Scaffold(
         containerColor = containerColor,
