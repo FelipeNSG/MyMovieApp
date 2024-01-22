@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,6 +47,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +62,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -71,15 +75,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.example.mymovieapp.R
 import com.example.mymovieapp.clases.BarItem
 import com.example.mymovieapp.data.repository.MoviesRepository
+import com.example.mymovieapp.movies.MoviesMostPopular
+import com.example.mymovieapp.movies.imagenMovieUrl
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -87,18 +96,13 @@ val containerColor = Color(0xFF1F1D2B)
 val colorBlue = Color(0xFF12CDD9)
 val colorGray = Color(0xFF92929D)
 
+val scope = CoroutineScope(Dispatchers.Default)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun MediaScreen(modifier: Modifier = Modifier) {
     var text by rememberSaveable { mutableStateOf("") }
-
-    val scope = rememberCoroutineScope()
-    
-    
-    scope.launch {
-        MoviesRepository.getPopularMovies()
-    }
 
     Scaffold(
         containerColor = containerColor,
@@ -309,7 +313,11 @@ fun Categories() {
 @Composable
 @Preview
 fun ListMovies() {
-
+    var popularMoviesList = remember { mutableStateOf(listOf<MoviesMostPopular>())
+    }
+    LaunchedEffect(Unit){
+        popularMoviesList = mutableStateOf(MoviesRepository.getPopularMovies())
+    }
     Box(
         Modifier.padding(horizontal = 16.dp)
     ) {
@@ -332,7 +340,8 @@ fun ListMovies() {
                 start = 8.dp
             ),
     ) {
-        items(10) {
+
+        items(10) {item ->
             Card(
                 modifier = Modifier
                     .width(135.dp)
@@ -340,8 +349,13 @@ fun ListMovies() {
                     .padding(8.dp, 20.dp),
 
                 ) {
-                Text(text = "hola")
+                SubcomposeAsyncImage(
+                    model = imagenMovieUrl(popularMoviesList.value[item].url),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    loading = {CircularProgressIndicator()}
 
+                )
             }
         }
     }

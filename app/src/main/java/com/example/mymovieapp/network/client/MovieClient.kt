@@ -1,12 +1,18 @@
 package com.example.mymovieapp.network.client
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object MovieClient {
 
+    /*val intercepter = HttpLoggingInterceptor().apply {
+        this.level = HttpLoggingInterceptor.Level.BODY
+    }*/
+
     private val client = OkHttpClient.Builder()
+       /* .addInterceptor(intercepter)*/
         .authenticator(Authentication())
         .build()
 

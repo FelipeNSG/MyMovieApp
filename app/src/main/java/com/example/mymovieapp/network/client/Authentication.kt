@@ -12,7 +12,7 @@ class Authentication : Authenticator {
         val token = ""
 
         return response.request.newBuilder()
-            .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDYyODkzNjQzYWRiNzZkYjA0YWZmZjhhYTBmMzBjMCIsInN1YiI6IjVkNTIyN2EwZmNiOGNjMDAxM2U4N2Y2NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2kWCs2IrkZsvdXdG_UyTdEKzU83ogVrzIMz6VEBBNXc")
+            .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMWNlYjVmN2IzNjJkMTNmM2E2MDZiM2YyNDg4MTYxNCIsInN1YiI6IjY1YWFlMTIzMzU3YzAwMDBjYmQ2ZGE5YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FgwahiZJIqrtSuCeFmWnKs49eVpZzRFNAfhoStjjb40")
             .build()
     }
 }
