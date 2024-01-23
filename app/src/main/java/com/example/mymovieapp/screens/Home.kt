@@ -58,11 +58,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -71,7 +70,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
@@ -89,12 +87,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
+//TODO("MOVE COLORS TO COLOR FILE")
 val containerColor = Color(0xFF1F1D2B)
 val colorBlue = Color(0xFF12CDD9)
 val colorGray = Color(0xFF92929D)
 
+//TODO("REMOVE IF NOT NEEDED")
 val scope = CoroutineScope(Dispatchers.Default)
 
+
+//TODO("REMOVE UNECESARY PREVIEWS)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
@@ -102,12 +104,10 @@ fun MediaScreen() {
 
     Scaffold(
         containerColor = containerColor,
-
         topBar = {
             TopAppBarMedia()
         },
         bottomBar = { BottomBar() }
-
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -130,14 +130,11 @@ fun MediaScreen() {
 fun TopAppBarMedia(modifier: Modifier = Modifier) {
     var text by rememberSaveable { mutableStateOf("") }
     TopAppBar(
-
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp, top = 5.dp),
         title = {
-
             OutlinedTextField(
-
                 modifier = Modifier
                     .width(320.dp)
                     .height(50.dp),
@@ -147,7 +144,7 @@ fun TopAppBarMedia(modifier: Modifier = Modifier) {
                 },
                 placeholder = {
                     Text(
-                        text = "Search a title..",
+                        text = stringResource(id = R.string.app_bar_placeholder),
                     )
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.White),
@@ -171,7 +168,6 @@ fun TopAppBarMedia(modifier: Modifier = Modifier) {
                     }
                 },
                 textStyle = MaterialTheme.typography.bodyMedium,
-
                 shape = CircleShape,
             )
         },
@@ -197,18 +193,19 @@ fun ContentBody() {
 
 @Composable
 fun ListUpcomingMovies() {
+    var movieListState by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+    LaunchedEffect(Unit) {
+        movieListState = MoviesRepository.getUpcomingMovies()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp),
         contentAlignment = Alignment.Center
     ) {
-        var movieListState by remember {
-            mutableStateOf(emptyList<Movie>())
-        }
-        LaunchedEffect(Unit) {
-            movieListState = MoviesRepository.getUpcomingMovies()
-        }
         if (movieListState.isNotEmpty()) Carousel(sliderList = movieListState.take(5)) else CircularProgressIndicator()
     }
 }
@@ -227,7 +224,6 @@ fun ListPlaynOW() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-
 fun Carousel(sliderList: List<Movie>) {
 
     val scope = rememberCoroutineScope()

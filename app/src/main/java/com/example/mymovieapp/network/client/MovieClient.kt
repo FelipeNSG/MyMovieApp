@@ -5,6 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+//TODO(BuildConfig)
 object MovieClient {
 
     /*val intercepter = HttpLoggingInterceptor().apply {

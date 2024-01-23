@@ -3,6 +3,7 @@ package com.example.mymovieapp.network.model
 
 import com.google.gson.annotations.SerializedName
 
+//todo rename to singular
 data class MovieLists(
     @SerializedName("page")
     val page: Int? = null,

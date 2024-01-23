@@ -5,7 +5,10 @@ import com.example.mymovieapp.domain.mappers.toMovie
 import com.example.mymovieapp.movies.Movie
 import retrofit2.HttpException
 
-// Repository
+//TODO("Take a look at the repository pattern")
+//TODO("Take a look at the mapper pattern")
+//TODO("Take a look at the result pattern")
+
 object MoviesRepository {
 
     suspend fun getPopularMovies(): List<Movie> {

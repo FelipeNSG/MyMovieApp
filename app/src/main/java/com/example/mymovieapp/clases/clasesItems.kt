@@ -7,4 +7,4 @@ data class BarItem(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val route: String
-    )
+)
