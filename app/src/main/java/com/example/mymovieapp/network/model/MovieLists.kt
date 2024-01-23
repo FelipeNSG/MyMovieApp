@@ -3,7 +3,7 @@ package com.example.mymovieapp.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularMovies(
+data class MovieLists(
     @SerializedName("page")
     val page: Int? = null,
     @SerializedName("results")
