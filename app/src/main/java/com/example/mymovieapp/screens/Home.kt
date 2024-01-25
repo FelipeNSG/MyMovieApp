@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -59,49 +58,56 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
-import coil.size.Scale
 import com.example.mymovieapp.R
 import com.example.mymovieapp.clases.BarItem
 import com.example.mymovieapp.data.repository.MoviesRepository
 import com.example.mymovieapp.movies.Movie
-import com.example.mymovieapp.movies.imagenMovieUrl
+import com.example.mymovieapp.movies.imageMovieUrl
+import com.example.mymovieapp.ui.theme.colorBlue
+import com.example.mymovieapp.ui.theme.colorGray
+import com.example.mymovieapp.ui.theme.containerColor
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
-//TODO("MOVE COLORS TO COLOR FILE")
-val containerColor = Color(0xFF1F1D2B)
-val colorBlue = Color(0xFF12CDD9)
-val colorGray = Color(0xFF92929D)
 
-//TODO("REMOVE IF NOT NEEDED")
-val scope = CoroutineScope(Dispatchers.Default)
-
-
-//TODO("REMOVE UNECESARY PREVIEWS)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun MediaScreen() {
-
+    var movieListState by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+    var listMostPopular by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+    var listPlayNow by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+    var listTopRate by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+    var listMostPopularSeries by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+    LaunchedEffect(Unit) {
+        movieListState = MoviesRepository.getUpcomingMovies()
+        listMostPopular = MoviesRepository.getPopularMovies()
+        listPlayNow = MoviesRepository.getPlayNow()
+        listTopRate = MoviesRepository.getTopRate()
+        listMostPopularSeries = MoviesRepository.getPopularSeries()
+    }
     Scaffold(
         containerColor = containerColor,
         topBar = {
@@ -114,14 +120,19 @@ fun MediaScreen() {
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            ListUpcomingMovies()
+            if (movieListState.isNotEmpty()) Carousel(sliderList = movieListState.take(5))
             Categories()
-            ListPopularMovies()
-            ListPlaynOW()
-            MovieListTopRate()
-            PopularSeries()
+            ListMovies(
+                movieList = listMostPopular,
+                title = stringResource(id = R.string.list_most_popular)
+            )
+            ListMovies(movieList = listPlayNow, title = stringResource(id = R.string.list_play_now))
+            ListMovies(movieList = listTopRate, title = stringResource(id = R.string.list_top_rate))
+            ListMovies(
+                movieList = listMostPopularSeries,
+                title = stringResource(id = R.string.list_most_popular_series)
+            )
         }
-
     }
 }
 
@@ -143,9 +154,7 @@ fun TopAppBarMedia(modifier: Modifier = Modifier) {
                     text = it
                 },
                 placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.app_bar_placeholder),
-                    )
+                    Text(text = stringResource(id = R.string.app_bar_placeholder))
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.White),
                 singleLine = true,
@@ -172,64 +181,18 @@ fun TopAppBarMedia(modifier: Modifier = Modifier) {
             )
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor),
-
-        )
+    )
 }
-
-@Composable
-fun ContentBody() {
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-
-    ) {
-        items(10) {
-            Text(text = "Item $it", color = Color.White)
-        }
-
-    }
-}
-
-@Composable
-fun ListUpcomingMovies() {
-    var movieListState by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    LaunchedEffect(Unit) {
-        movieListState = MoviesRepository.getUpcomingMovies()
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        if (movieListState.isNotEmpty()) Carousel(sliderList = movieListState.take(5)) else CircularProgressIndicator()
-    }
-}
-
-@Composable
-fun ListPlaynOW() {
-    var movieListState by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    LaunchedEffect(Unit) {
-        movieListState = MoviesRepository.getPlayNow()
-    }
-    ListMovies(movieList = movieListState, title = "Play Now")
-}
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Carousel(sliderList: List<Movie>) {
-
     val scope = rememberCoroutineScope()
-    var pagerState = rememberPagerState(initialPage = 2)
+    val pagerState = rememberPagerState(initialPage = 2)
     Column(
-
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp),
     ) {
         HorizontalPager(
             count = sliderList.size,
@@ -261,31 +224,20 @@ fun Carousel(sliderList: List<Movie>) {
                         )
                     }
             ) {
-                AsyncImage(
-                    placeholder = painterResource(id = R.drawable.baseline_image_24),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(imagenMovieUrl(sliderList[page].backdropPath))
-                        .crossfade(true)
-                        .scale(Scale.FILL)
-                        .build(),
+                SubcomposeAsyncImage(
+                    model = imageMovieUrl(sliderList[page].backdropPath),
                     contentDescription = null,
+                    loading = { CircularProgressIndicator() },
                     contentScale = ContentScale.Crop,
-                    onLoading = {
-
-                    },
-                    error = null,
                 )
             }
         }
-
         Row(
             Modifier
                 .height(50.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-
-
             repeat(sliderList.size) { it ->
                 val color =
                     if (pagerState.currentPage == it) Color(0xFF12CDD9) else Color(0xFF3fabcf)
@@ -308,65 +260,21 @@ fun Carousel(sliderList: List<Movie>) {
             }
         }
     }
-
-
 }
 
-
 @Composable
-@Preview
 fun Categories(modifier: Modifier = Modifier) {
     Text(
         modifier = modifier
-            .padding(
-                horizontal = 16.dp,
-            )
+            .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp),
         text = "Categories",
-
-        // H4/Semibold
         style = TextStyle(
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.montserrat)),
-            color = Color(0xFFFFFFFF),
+            color = Color.White
         )
     )
-
-}
-
-@Composable
-fun PopularSeries() {
-    var movieListState by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    LaunchedEffect(Unit) {
-        movieListState = MoviesRepository.getPopularSeries()
-    }
-    ListMovies(movieList = movieListState, "Popular Series")
-}
-
-@Composable
-fun MovieListTopRate() {
-    var movieListState by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    LaunchedEffect(Unit) {
-        movieListState = MoviesRepository.getTopRate()
-    }
-    ListMovies(movieList = movieListState, "Top rate")
-
-}
-
-@Composable
-fun ListPopularMovies() {
-    var movieListState by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    LaunchedEffect(Unit) {
-        movieListState = MoviesRepository.getPopularMovies()
-    }
-    ListMovies(movieList = movieListState, "Most Populars")
-
 }
 
 @Composable
@@ -377,22 +285,17 @@ fun ListMovies(movieList: List<Movie>, title: String) {
     ) {
         Text(
             text = title,
-
-            // H4/Semibold
             style = TextStyle(
                 fontSize = 17.sp,
                 fontFamily = FontFamily(Font(R.font.montserrat)),
-                color = Color(0xFFFFFFFF),
-
-                )
+                color = Color.White,
+            )
         )
     }
     LazyRow(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                start = 8.dp
-            ),
+            .padding(start = 8.dp),
     ) {
         items(movieList.size) { item ->
             Card(
@@ -400,15 +303,19 @@ fun ListMovies(movieList: List<Movie>, title: String) {
                     .width(135.dp)
                     .height(231.dp)
                     .padding(8.dp, 20.dp),
-
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                SubcomposeAsyncImage(
-                    model = imagenMovieUrl(movieList[item].url),
-                    contentDescription = null,
-                    loading = { CircularProgressIndicator(color = Color.White) },
-                    contentScale = ContentScale.Crop,
-
+                    SubcomposeAsyncImage(
+                        model = imageMovieUrl(movieList[item].url),
+                        contentDescription = null,
+                        loading = { CircularProgressIndicator() },
+                        contentScale = ContentScale.Crop,
                     )
+                }
             }
         }
     }
@@ -416,9 +323,8 @@ fun ListMovies(movieList: List<Movie>, title: String) {
 
 @Composable
 fun BottomBar(modifier: Modifier = Modifier) {
-
     var selectedItem by remember { mutableIntStateOf(0) }
-    var barItems = listOf<BarItem>(
+    val barItems = listOf<BarItem>(
         BarItem(
             title = "Home",
             selectedIcon = Icons.Filled.Home,
@@ -469,10 +375,6 @@ fun BottomBar(modifier: Modifier = Modifier) {
                     indicatorColor = Color(0xFF252836)
                 )
             )
-
         }
-
     }
-
-
 }
