@@ -20,10 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
@@ -63,6 +65,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
@@ -120,18 +123,12 @@ fun MediaScreen() {
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            if (movieListState.isNotEmpty()) Carousel(sliderList = movieListState.take(5))
+            ContentBoxCarousel(movieListState = movieListState)
             Categories()
-            ListMovies(
-                movieList = listMostPopular,
-                title = stringResource(id = R.string.list_most_popular)
-            )
-            ListMovies(movieList = listPlayNow, title = stringResource(id = R.string.list_play_now))
-            ListMovies(movieList = listTopRate, title = stringResource(id = R.string.list_top_rate))
-            ListMovies(
-                movieList = listMostPopularSeries,
-                title = stringResource(id = R.string.list_most_popular_series)
-            )
+            ContentColumnMovieList(movieList = listMostPopular, title = stringResource(id = R.string.list_most_popular) )
+            ContentColumnMovieList(movieList = listPlayNow, title = stringResource(id = R.string.list_play_now))
+            ContentColumnMovieList(movieList = listTopRate, title = stringResource(id = R.string.list_top_rate))
+            ContentColumnMovieList(movieList = listMostPopularSeries, title = stringResource(id = R.string.list_most_popular_series))
         }
     }
 }
@@ -184,16 +181,34 @@ fun TopAppBarMedia(modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+fun ContentColumnMovieList(movieList: List<Movie>, title: String){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+    ) {
+        ListMovies(movieList = movieList, title = title)
+    }
+}
+
+@Composable
+fun ContentBoxCarousel(movieListState: List<Movie>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(290.dp)
+    ) {
+        if (movieListState.isNotEmpty()) Carousel(sliderList = movieListState.take(5))
+    }
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Carousel(sliderList: List<Movie>) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = 2)
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp),
-    ) {
+    Column{
         HorizontalPager(
             count = sliderList.size,
             state = pagerState,
@@ -201,7 +216,6 @@ fun Carousel(sliderList: List<Movie>) {
             modifier = Modifier
                 .height(250.dp)
                 .fillMaxWidth()
-
         ) { page ->
             Card(
                 colors = CardDefaults.cardColors(Color.Transparent),
@@ -234,14 +248,14 @@ fun Carousel(sliderList: List<Movie>) {
         }
         Row(
             Modifier
-                .height(50.dp)
+                .height(40.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(sliderList.size) { it ->
+            repeat(sliderList.size) { page ->
                 val color =
-                    if (pagerState.currentPage == it) Color(0xFF12CDD9) else Color(0xFF3fabcf)
-                val withButton = if (pagerState.currentPage == it) {
+                    if (pagerState.currentPage == page) Color(0xFF12CDD9) else Color(0xFF3fabcf)
+                val withButton = if (pagerState.currentPage == page) {
                     38.dp
                 } else 10.dp
                 Box(
@@ -253,7 +267,7 @@ fun Carousel(sliderList: List<Movie>) {
                         .background(color)
                         .clickable {
                             scope.launch {
-                                pagerState.animateScrollToPage(it)
+                                pagerState.animateScrollToPage(page)
                             }
                         }
                 )
@@ -322,9 +336,9 @@ fun ListMovies(movieList: List<Movie>, title: String) {
 }
 
 @Composable
-fun BottomBar(modifier: Modifier = Modifier) {
+fun BottomBar() {
     var selectedItem by remember { mutableIntStateOf(0) }
-    val barItems = listOf<BarItem>(
+    val barItems = listOf(
         BarItem(
             title = "Home",
             selectedIcon = Icons.Filled.Home,
@@ -341,17 +355,18 @@ fun BottomBar(modifier: Modifier = Modifier) {
             title = "Download",
             selectedIcon = Icons.Filled.Download,
             unselectedIcon = Icons.Outlined.Download,
-            route = "Home"
+            route = "Download"
         ),
         BarItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Person,
-            unselectedIcon = Icons.Outlined.Person,
-            route = "Home"
+            title = "Favorites",
+            selectedIcon = Icons.Filled.Favorite,
+            unselectedIcon = Icons.Outlined.FavoriteBorder,
+            route = "Favorites"
         )
     )
     NavigationBar(
         containerColor = containerColor,
+
     ) {
         barItems.forEachIndexed { index, barItem ->
             val selected = selectedItem == index

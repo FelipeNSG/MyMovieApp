@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.mymovieapp.screens.Categories
 import com.example.mymovieapp.screens.MediaScreen
+import com.example.mymovieapp.screens.ScaffoldTemplatePreview
 
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 color = MaterialTheme.colorScheme.background
             ) {
 
-                MediaScreen()
+                ScaffoldTemplatePreview()
             }
         }
     }
