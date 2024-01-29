@@ -1,8 +1,8 @@
 package com.example.mymovieapp.data.repository
 import android.util.Log
-import com.example.mymovieapp.network.client.MovieClient
 import com.example.mymovieapp.domain.mappers.toMovie
 import com.example.mymovieapp.movies.Movie
+import com.example.mymovieapp.network.client.MovieClient
 import retrofit2.HttpException
 
 //TODO("Take a look at the repository pattern")
@@ -72,5 +72,7 @@ object MoviesRepository {
             emptyList()
         }
     }
+
+
 
 }
