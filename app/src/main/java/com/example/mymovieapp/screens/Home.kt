@@ -51,6 +51,8 @@ import com.example.mymovieapp.common.BottomBar
 import com.example.mymovieapp.common.TopAppBarSearch
 import com.example.mymovieapp.data.repository.MoviesRepository
 import com.example.mymovieapp.movies.Movie
+import com.example.mymovieapp.movies.MovieAndSeries
+import com.example.mymovieapp.movies.Series
 import com.example.mymovieapp.movies.imageMovieUrl
 import com.example.mymovieapp.navigation.AppScreen
 import com.example.mymovieapp.ui.theme.containerColor
@@ -78,7 +80,7 @@ fun MediaScreen(navController: NavHostController) {
         mutableStateOf(emptyList<Movie>())
     }
     var listMostPopularSeries by remember {
-        mutableStateOf(emptyList<Movie>())
+        mutableStateOf(emptyList<Series>())
     }
     LaunchedEffect(Unit) {
         movieListState = MoviesRepository.getUpcomingMovies()
@@ -109,16 +111,14 @@ fun MediaScreen(navController: NavHostController) {
     }
 }
 
-
-
 @Composable
-fun ContentColumnMovieList(navController: NavHostController, movieList: List<Movie>, title: String){
+fun ContentColumnMovieList(navController: NavHostController, movieList:List<MovieAndSeries>, title: String){
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
     ) {
-        ListMovies(movieList = movieList, title = title, navController = navController)
+        ListMovies(movieAndSeries = movieList, title = title, navController = navController)
     }
 }
 
@@ -222,7 +222,7 @@ fun Categories(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ListMovies(navController: NavHostController, movieList: List<Movie>, title: String) {
+fun ListMovies(navController: NavHostController, movieAndSeries: List<MovieAndSeries>, title: String) {
 
     Box(
         Modifier.padding(horizontal = 16.dp)
@@ -241,14 +241,15 @@ fun ListMovies(navController: NavHostController, movieList: List<Movie>, title: 
             .fillMaxSize()
             .padding(start = 8.dp),
     ) {
-        items(movieList.size) { item ->
+
+        items(movieAndSeries.size) { item ->
             Card(
                 modifier = Modifier
                     .width(135.dp)
                     .height(231.dp)
                     .padding(8.dp, 20.dp)
                     .clickable {
-                        navController.navigate(route = AppScreen.MovieDetails.route + "/${movieList[item].title}")
+                            navController.navigate(route = AppScreen.MovieDetails.route + "/${movieAndSeries[item]._id}/${movieAndSeries[item]._type}")
                     },
             ) {
                 Box(
@@ -257,7 +258,7 @@ fun ListMovies(navController: NavHostController, movieList: List<Movie>, title: 
                     contentAlignment = Alignment.Center
                 ) {
                     SubcomposeAsyncImage(
-                        model = imageMovieUrl(movieList[item].url),
+                        model = imageMovieUrl(movieAndSeries[item]._url),
                         contentDescription = null,
                         loading = { CircularProgressIndicator() },
                         contentScale = ContentScale.Crop,

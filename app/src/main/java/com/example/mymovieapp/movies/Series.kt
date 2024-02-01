@@ -1,11 +1,11 @@
 package com.example.mymovieapp.movies
 
-data class Movie(
+data class Series(
     val id: Int,
     val title: String,
     val url: String,
     val backdropPath: String,
-    val type: String = "movie"
+    val type: String = "series"
 ): MovieAndSeries(
     id,
     title,
@@ -13,4 +13,3 @@ data class Movie(
     backdropPath,
     type
 )
-

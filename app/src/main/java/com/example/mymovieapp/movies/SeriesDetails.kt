@@ -1,16 +1,16 @@
 package com.example.mymovieapp.movies
 
-import com.example.mymovieapp.network.model.MovieIdData.Genre
+import com.example.mymovieapp.network.model.SeriesIdData.Genre
 
-data class MovieDetails(
+data class SeriesDetails(
     val id: Int,
     val title: String,
-    val genres: List<Genre>,
-    val runtime: Int,
+    val genres:  List<Genre?>,
+    val numberOfSeason: Int,
     val tagline: String,
     val overview: String,
     val posterPath: String,
-    val releaseDate: String,
+    val lastAirDate: String,
     val voteAverage: Double,
     val backdropPath: String,
 )

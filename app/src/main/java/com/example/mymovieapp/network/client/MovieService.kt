@@ -1,11 +1,14 @@
 package com.example.mymovieapp.network.client
 
+import com.example.mymovieapp.network.model.MovieIdData.MovieId
 import com.example.mymovieapp.network.model.MovieList
 import com.example.mymovieapp.network.model.MovieListsWithDate
+import com.example.mymovieapp.network.model.SeriesIdData.SeriesId
 import retrofit2.http.GET
+import retrofit2.http.Path
+
 
 interface MovieService {
-
     @GET("3/movie/popular")
     suspend fun getPopularMovies(): MovieList
 
@@ -20,6 +23,12 @@ interface MovieService {
 
     @GET("3/tv/popular?language=en-US&page=1")
     suspend fun getPopularSeries(): MovieList
+
+    @GET("3/movie/{id}?language=en-US")
+    suspend fun getMovieDetails(@Path("id") id: Int): MovieId
+    @GET("3/tv/{id}?language=en-US")
+    suspend fun getSeriesDetails(@Path("id") id: Int): SeriesId
+
 
 }
 

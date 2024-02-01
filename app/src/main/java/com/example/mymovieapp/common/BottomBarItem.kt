@@ -19,10 +19,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import com.example.mymovieapp.clases.BarItem
 import com.example.mymovieapp.ui.theme.colorBlue
 import com.example.mymovieapp.ui.theme.colorGray
+import com.example.mymovieapp.ui.theme.colorLightBlack
 import com.example.mymovieapp.ui.theme.containerColor
 
 @Composable
@@ -77,7 +77,7 @@ fun BottomBar() {
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color(0xFF252836)
+                    indicatorColor = colorLightBlack
                 )
             )
         }

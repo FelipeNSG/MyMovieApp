@@ -1,28 +1,27 @@
-package com.example.mymovieapp.network.model.MovieIdData
+package com.example.mymovieapp.network.model.SeriesIdData
+
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieId(
-    @SerializedName("adult")
-    val adult: Boolean?,
+data class SeriesId(
+    @SerializedName("number_of_seasons")
+    val numberOfSeasons: Int?,
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("genres")
-    val genres: List<Genre>?,
+    val genres: List<Genre?>?,
     @SerializedName("id")
     val id: Int?,
+    @SerializedName("last_air_date")
+    val lastAirDate: String?,
+    @SerializedName("name")
+    val name: String?,
     @SerializedName("overview")
     val overview: String?,
     @SerializedName("poster_path")
     val posterPath: String?,
-    @SerializedName("release_date")
-    val releaseDate: String?,
-    @SerializedName("runtime")
-    val runtime: Int?,
     @SerializedName("tagline")
     val tagline: String?,
-    @SerializedName("title")
-    val title: String?,
     @SerializedName("vote_average")
-    val voteAverage: Double?,
+    val voteAverage: Double?
 )

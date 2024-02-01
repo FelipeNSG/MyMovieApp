@@ -19,13 +19,17 @@ fun AppNavigation() {
         }
 
         composable(
-            AppScreen.MovieDetails.route + "/{title}",
+            AppScreen.MovieDetails.route + "/{id}/{type}",
             arguments = listOf(
-                navArgument(name = "title") {
-                type = NavType.StringType
-                })
+                navArgument(name = "id") {
+                type = NavType.IntType
+                },
+                navArgument(name = "type") {
+                    type = NavType.StringType
+                }
+            )
         ) {
-            MovieDetails(navController = navController, it.arguments?.getString("title"))
+            MovieDetails(navController = navController, it.arguments?.getInt("id"), it.arguments?.getString("type") )
         }
     }
 }
