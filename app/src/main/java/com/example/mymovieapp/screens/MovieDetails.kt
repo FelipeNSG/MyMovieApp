@@ -1,7 +1,6 @@
 package com.example.mymovieapp.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,16 +35,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import com.example.mymovieapp.R
 import com.example.mymovieapp.common.BodyTemplate
+import com.example.mymovieapp.common.ImageLazyRow
+import com.example.mymovieapp.common.Profiles
 import com.example.mymovieapp.common.TopAppBarTemplate
 import com.example.mymovieapp.data.repository.MoviesRepository
 import com.example.mymovieapp.movies.MovieDetails
@@ -60,14 +64,10 @@ import com.example.mymovieapp.ui.theme.containerColor
 
 @Composable
 fun Details(navController: NavHostController, title: String, poster: String) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(containerColor)
-            .clickable {
-                navController.popBackStack()
-            },
+            .background(containerColor),
 
         ) {
         SubcomposeAsyncImage(
@@ -85,7 +85,9 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            TopAppBarTemplate(title = title, secondIcon = true)
+            TopAppBarTemplate(title = title, secondIcon = true,
+                navController
+            )
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -225,6 +227,22 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                         .padding(horizontal = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+
+                    Text(
+                        text = "Tag Line",
+                        style = TextStyle(
+                            fontSize = 17.sp,
+                            fontFamily = FontFamily(Font(R.font.montserrat)),
+                            color = Color.White,
+                        )
+                    )
+                    Text(
+                        text = "Aqui va el texto del tag line",
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.montserrat)),
+                            color = Color.White,
+                        )
+                    )
                     Text(
                         text = "Story Line",
                         style = TextStyle(
@@ -233,26 +251,33 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                             color = Color.White,
                         )
                     )
-                    Row(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Text(
-                            text = "Black Manta, still driven by the need to avenge his father's death and wielding the power of the mythic Black Trident, will stop at nothing to take Aquaman down once and for all. ",
-                            style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.montserrat)),
-                                color = colorWhite,
-                            ),
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 4,
-                        )
-                        Text(
-                            text = "More",
-                            style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.montserrat)),
-                                color = colorBlue,
-                            )
-                        )
-                    }
+                    val comentario =
+                        "Black Manta, still driven by the need to avenge his father's death and wielding the power of the mythic Black Trident, will stop at nothing to take Aquaman down once and for all. "
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    color = colorWhite,
+                                    fontFamily = FontFamily(Font(R.font.montserrat))
+                                )
+                            ) {
+                                if (comentario.length <= 60 && comentario[59] != '.') {
+                                    append(comentario.plus("..."))
+                                } else append(comentario.substring(0, 60))
+
+                            }
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    color = colorBlue
+                                )
+                            ) {
+                                if (comentario.length > 60) {
+                                    append(" More")
+                                }
+                            }
+                        },
+                    )
                     Text(
                         text = "Cast and Crew",
                         style = TextStyle(
@@ -261,12 +286,21 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                             color = Color.White,
                         )
                     )
+                    Profiles()
+                    Text(
+                        text = "Gallery",
+                        style = TextStyle(
+                            fontSize = 17.sp,
+                            fontFamily = FontFamily(Font(R.font.montserrat)),
+                            color = Color.White,
+                        )
+                    )
+                    ImageLazyRow()
                 }
             }
         }
     }
 }
-
 @Composable
 fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     var title by remember {

@@ -103,16 +103,36 @@ fun MediaScreen(navController: NavHostController) {
         ) {
             ContentBoxCarousel(movieListState = movieListState)
             Categories()
-            ContentColumnMovieList(movieList = listMostPopular, title = stringResource(id = R.string.list_most_popular), navController = navController )
-            ContentColumnMovieList(movieList = listPlayNow, title = stringResource(id = R.string.list_play_now), navController = navController )
-            ContentColumnMovieList(movieList = listTopRate, title = stringResource(id = R.string.list_top_rate), navController = navController )
-            ContentColumnMovieList(movieList = listMostPopularSeries, title = stringResource(id = R.string.list_most_popular_series), navController = navController )
+            ContentColumnMovieList(
+                movieList = listMostPopular,
+                title = stringResource(id = R.string.list_most_popular),
+                navController = navController
+            )
+            ContentColumnMovieList(
+                movieList = listPlayNow,
+                title = stringResource(id = R.string.list_play_now),
+                navController = navController
+            )
+            ContentColumnMovieList(
+                movieList = listTopRate,
+                title = stringResource(id = R.string.list_top_rate),
+                navController = navController
+            )
+            ContentColumnMovieList(
+                movieList = listMostPopularSeries,
+                title = stringResource(id = R.string.list_most_popular_series),
+                navController = navController
+            )
         }
     }
 }
 
 @Composable
-fun ContentColumnMovieList(navController: NavHostController, movieList:List<MovieAndSeries>, title: String){
+fun ContentColumnMovieList(
+    navController: NavHostController,
+    movieList: List<MovieAndSeries>,
+    title: String
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -138,7 +158,7 @@ fun ContentBoxCarousel(movieListState: List<Movie>) {
 fun Carousel(sliderList: List<Movie>) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = 2)
-    Column{
+    Column {
         HorizontalPager(
             count = sliderList.size,
             state = pagerState,
@@ -151,6 +171,8 @@ fun Carousel(sliderList: List<Movie>) {
                 colors = CardDefaults.cardColors(Color.Transparent),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
+                    .height(200.dp)
+                    .width(300.dp)
                     .graphicsLayer {
                         val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
                         lerp(
@@ -169,9 +191,20 @@ fun Carousel(sliderList: List<Movie>) {
                     }
             ) {
                 SubcomposeAsyncImage(
-                    model = imageMovieUrl(sliderList[page].backdropPath),
+                    modifier = Modifier.fillMaxSize(),
+                    model = imageMovieUrl(sliderList[page].backdropPath, width = "original"),
                     contentDescription = null,
-                    loading = { CircularProgressIndicator() },
+                    loading = {
+                       /* Column(
+                            modifier = Modifier
+                                .width(30.dp)
+                                .height(30.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }*/
+                    },
                     contentScale = ContentScale.Crop,
                 )
             }
@@ -222,7 +255,11 @@ fun Categories(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ListMovies(navController: NavHostController, movieAndSeries: List<MovieAndSeries>, title: String) {
+fun ListMovies(
+    navController: NavHostController,
+    movieAndSeries: List<MovieAndSeries>,
+    title: String
+) {
 
     Box(
         Modifier.padding(horizontal = 16.dp)
@@ -241,7 +278,6 @@ fun ListMovies(navController: NavHostController, movieAndSeries: List<MovieAndSe
             .fillMaxSize()
             .padding(start = 8.dp),
     ) {
-
         items(movieAndSeries.size) { item ->
             Card(
                 modifier = Modifier
@@ -249,7 +285,7 @@ fun ListMovies(navController: NavHostController, movieAndSeries: List<MovieAndSe
                     .height(231.dp)
                     .padding(8.dp, 20.dp)
                     .clickable {
-                            navController.navigate(route = AppScreen.MovieDetails.route + "/${movieAndSeries[item]._id}/${movieAndSeries[item]._type}")
+                        navController.navigate(route = AppScreen.MovieDetails.route + "/${movieAndSeries[item]._id}/${movieAndSeries[item]._type}")
                     },
             ) {
                 Box(
@@ -260,8 +296,19 @@ fun ListMovies(navController: NavHostController, movieAndSeries: List<MovieAndSe
                     SubcomposeAsyncImage(
                         model = imageMovieUrl(movieAndSeries[item]._url),
                         contentDescription = null,
-                        loading = { CircularProgressIndicator() },
+                        loading = {
+                            Column(
+                                modifier = Modifier
+                                    .width(30.dp)
+                                    .height(30.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        },
                         contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }

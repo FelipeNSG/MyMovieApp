@@ -18,15 +18,17 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.mymovieapp.R
 import com.example.mymovieapp.ui.theme.colorWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarTemplate(title: String?, secondIcon: Boolean) {
+fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHostController ) {
     Row(
 
     ) {
+
         CenterAlignedTopAppBar(
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp),
@@ -52,7 +54,7 @@ fun TopAppBarTemplate(title: String?, secondIcon: Boolean) {
             },
             colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Icon",
