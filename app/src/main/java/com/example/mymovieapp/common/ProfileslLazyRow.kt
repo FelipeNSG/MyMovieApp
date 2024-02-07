@@ -15,19 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.example.mymovieapp.movies.imageMovieUrl
+import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.ui.theme.colorWhite
 
 @Composable
-@Preview
-fun Profiles() {
+fun Profiles(movieCredits: List<MovieCast>) {
     LazyRow(
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        items(20) { item ->
+        items(movieCredits.take(20).size) { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -38,7 +38,7 @@ fun Profiles() {
 
                 ) {
                     SubcomposeAsyncImage(
-                        model = "https://picsum.photos/id/235/200/300",
+                        model = imageMovieUrl(movieCredits[item].profilePath),
                         contentDescription = null,
                         loading = { CircularProgressIndicator() },
                         modifier = Modifier
@@ -50,8 +50,8 @@ fun Profiles() {
                 Column(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 ) {
-                    Text(text = "Nombre Actor", color = colorWhite)
-                    Text(text = "Puesto del actor", color = colorWhite)
+                    Text(text =  movieCredits[item].originalName, color = colorWhite)
+                    Text(text = movieCredits[item].character, color = colorWhite)
                 }
             }
         }

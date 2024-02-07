@@ -1,4 +1,4 @@
-package com.example.mymovieapp.network.model.MovieIdData
+package com.example.mymovieapp.network.model.moviedata
 
 
 import com.google.gson.annotations.SerializedName

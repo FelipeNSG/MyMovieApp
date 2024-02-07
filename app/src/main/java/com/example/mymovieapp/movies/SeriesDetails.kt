@@ -1,6 +1,6 @@
 package com.example.mymovieapp.movies
 
-import com.example.mymovieapp.network.model.SeriesIdData.Genre
+import com.example.mymovieapp.network.model.seriesdata.Genre
 
 data class SeriesDetails(
     val id: Int,

@@ -1,12 +1,16 @@
 package com.example.mymovieapp.domain.mappers
 
 import com.example.mymovieapp.movies.Movie
+import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
+import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.MovieDetails
 import com.example.mymovieapp.movies.Series
 import com.example.mymovieapp.movies.SeriesDetails
-import com.example.mymovieapp.network.model.MovieIdData.MovieId
 import com.example.mymovieapp.network.model.Result
-import com.example.mymovieapp.network.model.SeriesIdData.SeriesId
+import com.example.mymovieapp.network.model.movieandseriescredits.Cast
+import com.example.mymovieapp.network.model.movieandseriesimages.Poster
+import com.example.mymovieapp.network.model.moviedata.MovieId
+import com.example.mymovieapp.network.model.seriesdata.SeriesId
 
 fun Result.toMovie(): Movie {
     // mapper
@@ -56,5 +60,20 @@ fun SeriesId.toSeriesDetails(): SeriesDetails {
         lastAirDate = this.lastAirDate ?: "unknown",
         voteAverage = this.voteAverage ?: 0.0,
         backdropPath = this.backdropPath ?: "default_backdropPath"
+    )
+}
+
+fun Cast.toMovieAndSeriesCast(): MovieCast {
+    return MovieCast(
+        originalName = this.originalName ?: "unknown",
+        character = this.character ?: "unknown",
+        profilePath = this.profilePath ?: "defaultProfilePath"
+    )
+}
+
+fun Poster.toMovieAndSeriesImagePoster(): MovieAndSeriesImagePoster {
+    return MovieAndSeriesImagePoster(
+        filePath = this.filePath ?: "defaultProfilePath",
+        iso6391 = this.iso6391 ?: "unknown"
     )
 }

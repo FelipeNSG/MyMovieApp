@@ -1,9 +1,11 @@
 package com.example.mymovieapp.network.client
 
-import com.example.mymovieapp.network.model.MovieIdData.MovieId
 import com.example.mymovieapp.network.model.MovieList
 import com.example.mymovieapp.network.model.MovieListsWithDate
-import com.example.mymovieapp.network.model.SeriesIdData.SeriesId
+import com.example.mymovieapp.network.model.movieandseriescredits.MovieAndSeriesCredits
+import com.example.mymovieapp.network.model.movieandseriesimages.MovieAndSeriesImages
+import com.example.mymovieapp.network.model.moviedata.MovieId
+import com.example.mymovieapp.network.model.seriesdata.SeriesId
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -29,6 +31,16 @@ interface MovieService {
     @GET("3/tv/{id}?language=en-US")
     suspend fun getSeriesDetails(@Path("id") id: Int): SeriesId
 
+    @GET("3/movie/{id}/credits")
+    suspend fun getMovieCredits(@Path("id") id: Int): MovieAndSeriesCredits
+    @GET("3/tv/{id}/credits?language=en-US")
+    suspend fun getSeriesCredits(@Path("id") id: Int): MovieAndSeriesCredits
+
+    @GET("3/movie/{id}/images")
+    suspend fun getMovieImagesPoster(@Path("id") id: Int): MovieAndSeriesImages
+
+    @GET("3/tv/{id}/images")
+    suspend fun getSeriesImagesPoster(@Path("id") id: Int): MovieAndSeriesImages
 
 }
 

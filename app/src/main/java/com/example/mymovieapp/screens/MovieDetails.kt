@@ -52,6 +52,8 @@ import com.example.mymovieapp.common.ImageLazyRow
 import com.example.mymovieapp.common.Profiles
 import com.example.mymovieapp.common.TopAppBarTemplate
 import com.example.mymovieapp.data.repository.MoviesRepository
+import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
+import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.MovieDetails
 import com.example.mymovieapp.movies.SeriesDetails
 import com.example.mymovieapp.movies.imageMovieUrl
@@ -63,7 +65,12 @@ import com.example.mymovieapp.ui.theme.colorWhite
 import com.example.mymovieapp.ui.theme.containerColor
 
 @Composable
-fun Details(navController: NavHostController, title: String, poster: String) {
+fun Details(
+    navController: NavHostController,
+    title: String, poster: String,
+    movieCredits: List<MovieCast>,
+    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -85,7 +92,8 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            TopAppBarTemplate(title = title, secondIcon = true,
+            TopAppBarTemplate(
+                title = title, secondIcon = true,
                 navController
             )
             Column(
@@ -286,7 +294,7 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                             color = Color.White,
                         )
                     )
-                    Profiles()
+                    Profiles(movieCredits)
                     Text(
                         text = "Gallery",
                         style = TextStyle(
@@ -295,12 +303,13 @@ fun Details(navController: NavHostController, title: String, poster: String) {
                             color = Color.White,
                         )
                     )
-                    ImageLazyRow()
+                    ImageLazyRow( movieAndSeriesImagePoster)
                 }
             }
         }
     }
 }
+
 @Composable
 fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     var title by remember {
@@ -315,21 +324,40 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     var seriesDetails: SeriesDetails? by remember {
         mutableStateOf(null)
     }
+    var movieAndSeriesCredits by remember {
+        mutableStateOf(emptyList<MovieCast>())
+    }
+    var movieAndSeriesImagePoster by remember {
+        mutableStateOf(emptyList<MovieAndSeriesImagePoster>())
+    }
     LaunchedEffect(Unit) {
         if (id != null && type == "movie") {
             movieDetails = MoviesRepository.getMovieDetails(id)
             title = movieDetails?.title ?: ""
             poster = movieDetails?.posterPath ?: ""
+            movieAndSeriesCredits = MoviesRepository.getMovieCredits(id)
+            movieAndSeriesImagePoster = MoviesRepository.getMovieImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
+
         }
         if (id != null && type == "series") {
             seriesDetails = MoviesRepository.getSeriesDetails(id)
             title = seriesDetails?.title ?: ""
             poster = seriesDetails?.posterPath ?: ""
+            movieAndSeriesCredits = MoviesRepository.getSeriesCredits(id)
+            movieAndSeriesImagePoster = MoviesRepository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
         }
     }
     BodyTemplate(container = containerColor,
         topBar = { },
         bottomBar = { },
-        body = { Details(navController, title, poster) })
+        body = {
+            Details(
+                navController,
+                title,
+                poster,
+                movieAndSeriesCredits,
+                movieAndSeriesImagePoster
+            )
+        })
 }
 

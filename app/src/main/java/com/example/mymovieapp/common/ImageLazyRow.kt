@@ -13,20 +13,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
+import com.example.mymovieapp.movies.imageMovieUrl
 
 @Composable
-@Preview()
-fun ImageLazyRow(){
+fun ImageLazyRow(movieAndSeriesImagePoster:List<MovieAndSeriesImagePoster> ){
+
     LazyRow(
         modifier = Modifier
             .fillMaxSize()
             .padding(start = 8.dp),
     ) {
 
-        items(20) { item ->
+        items(movieAndSeriesImagePoster.take(10).size) { item ->
             Card(
                 modifier = Modifier
                     .width(120.dp)
@@ -42,7 +43,7 @@ fun ImageLazyRow(){
                 ) {
                     SubcomposeAsyncImage(
                         modifier = Modifier.fillMaxSize(),
-                        model = "https://picsum.photos/id/234/200/300",
+                        model = imageMovieUrl(movieAndSeriesImagePoster[item].filePath),
                         contentDescription = null,
                         loading = { CircularProgressIndicator() },
                         contentScale = ContentScale.Crop,

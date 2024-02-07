@@ -1,11 +1,14 @@
 package com.example.mymovieapp.data.repository
-
 import android.util.Log
 import com.example.mymovieapp.domain.mappers.toMovie
+import com.example.mymovieapp.domain.mappers.toMovieAndSeriesCast
+import com.example.mymovieapp.domain.mappers.toMovieAndSeriesImagePoster
 import com.example.mymovieapp.domain.mappers.toMovieDetails
 import com.example.mymovieapp.domain.mappers.toSeries
 import com.example.mymovieapp.domain.mappers.toSeriesDetails
 import com.example.mymovieapp.movies.Movie
+import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
+import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.MovieDetails
 import com.example.mymovieapp.movies.Series
 import com.example.mymovieapp.movies.SeriesDetails
@@ -99,4 +102,44 @@ object MoviesRepository {
             return null
         }
     }
+
+    suspend fun getMovieCredits(id: Int): List<MovieCast>{
+        return  try {
+            val result = MovieClient.createMoviesService().getMovieCredits(id)
+            result.cast?.mapNotNull { it?.toMovieAndSeriesCast() }?: emptyList()
+        } catch (ex: HttpException) {
+            ex.printStackTrace()
+            emptyList()
+        }
+    }
+    suspend fun getSeriesCredits(id: Int): List<MovieCast>{
+        return  try {
+            val result = MovieClient.createMoviesService().getSeriesCredits(id)
+            result.cast?.mapNotNull { it?.toMovieAndSeriesCast() }?: emptyList()
+        } catch (ex: HttpException) {
+            ex.printStackTrace()
+            emptyList()
+        }
+    }
+
+    suspend fun getMovieImagesPoster(id: Int): List<MovieAndSeriesImagePoster>{
+        return try {
+            val result = MovieClient.createMoviesService().getMovieImagesPoster(id)
+            result.posters?.mapNotNull { it?.toMovieAndSeriesImagePoster() }?: emptyList()
+        }catch (ex: HttpException) {
+            ex.printStackTrace()
+            emptyList()
+        }
+    }
+
+    suspend fun getSeriesImagesPoster(id: Int): List<MovieAndSeriesImagePoster>{
+        return try {
+            val result = MovieClient.createMoviesService().getSeriesImagesPoster(id)
+            result.posters?.mapNotNull { it?.toMovieAndSeriesImagePoster() }?: emptyList()
+        }catch (ex: HttpException) {
+            ex.printStackTrace()
+            emptyList()
+        }
+    }
+
 }
