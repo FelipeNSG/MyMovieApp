@@ -1,4 +1,4 @@
-package com.example.mymovieapp.screens
+package com.example.mymovieapp.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -67,12 +67,19 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaScreen(navController: NavHostController) {
-    var movieListState by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
+
+    val homeController = HomeController(
+        HomeModel()
+    )
+
     var listMostPopular by remember {
         mutableStateOf(emptyList<Movie>())
     }
+
+    var movieListState by remember {
+        mutableStateOf(emptyList<Movie>())
+    }
+
     var listPlayNow by remember {
         mutableStateOf(emptyList<Movie>())
     }
@@ -84,8 +91,13 @@ fun MediaScreen(navController: NavHostController) {
     }
     LaunchedEffect(Unit) {
         movieListState = MoviesRepository.getUpcomingMovies()
-        listMostPopular = MoviesRepository.getPopularMovies()
-        listPlayNow = MoviesRepository.getPlayNow()
+        //listMostPopular = MoviesRepository.getPopularMovies()
+        homeController.getPopularMovies {
+            listMostPopular = it
+        }
+        homeController.getPlayNowMovies {
+            listPlayNow = it
+        }
         listTopRate = MoviesRepository.getTopRate()
         listMostPopularSeries = MoviesRepository.getPopularSeries()
     }
