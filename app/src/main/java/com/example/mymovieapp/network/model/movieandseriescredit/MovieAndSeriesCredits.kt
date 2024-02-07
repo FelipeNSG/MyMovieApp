@@ -1,4 +1,4 @@
-package com.example.mymovieapp.network.model.movieandseriescredits
+package com.example.mymovieapp.network.model.movieandseriescredit
 
 
 import com.google.gson.annotations.SerializedName

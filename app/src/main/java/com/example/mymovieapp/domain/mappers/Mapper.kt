@@ -7,7 +7,7 @@ import com.example.mymovieapp.movies.MovieDetails
 import com.example.mymovieapp.movies.Series
 import com.example.mymovieapp.movies.SeriesDetails
 import com.example.mymovieapp.network.model.Result
-import com.example.mymovieapp.network.model.movieandseriescredits.Cast
+import com.example.mymovieapp.network.model.movieandseriescredit.Cast
 import com.example.mymovieapp.network.model.movieandseriesimages.Poster
 import com.example.mymovieapp.network.model.moviedata.MovieId
 import com.example.mymovieapp.network.model.seriesdata.SeriesId
@@ -44,7 +44,6 @@ fun MovieId.toMovieDetails(): MovieDetails {
         posterPath = this.posterPath ?: "default_poster",
         releaseDate = this.releaseDate ?: "unknown",
         voteAverage = this.voteAverage ?: 0.0,
-        backdropPath = this.backdropPath ?: "default_backdropPath"
     )
 }
 

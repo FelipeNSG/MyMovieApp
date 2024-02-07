@@ -49,7 +49,6 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.mymovieapp.R
 import com.example.mymovieapp.common.BottomBar
 import com.example.mymovieapp.common.TopAppBarSearch
-import com.example.mymovieapp.data.repository.MoviesRepository
 import com.example.mymovieapp.movies.Movie
 import com.example.mymovieapp.movies.MovieAndSeries
 import com.example.mymovieapp.movies.Series
@@ -76,7 +75,7 @@ fun MediaScreen(navController: NavHostController) {
         mutableStateOf(emptyList<Movie>())
     }
 
-    var movieListState by remember {
+    var listUpcoming by remember {
         mutableStateOf(emptyList<Movie>())
     }
 
@@ -90,16 +89,23 @@ fun MediaScreen(navController: NavHostController) {
         mutableStateOf(emptyList<Series>())
     }
     LaunchedEffect(Unit) {
-        movieListState = MoviesRepository.getUpcomingMovies()
-        //listMostPopular = MoviesRepository.getPopularMovies()
+
+        homeController.getUpcomingMovies{
+            listUpcoming = it
+        }
         homeController.getPopularMovies {
             listMostPopular = it
         }
         homeController.getPlayNowMovies {
             listPlayNow = it
         }
-        listTopRate = MoviesRepository.getTopRate()
-        listMostPopularSeries = MoviesRepository.getPopularSeries()
+        homeController.getTopRate{
+            listTopRate = it
+        }
+
+        homeController.getPopularSeries{
+            listMostPopularSeries = it
+        }
     }
     Scaffold(
         containerColor = containerColor,
@@ -113,7 +119,7 @@ fun MediaScreen(navController: NavHostController) {
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            ContentBoxCarousel(movieListState = movieListState)
+            ContentBoxCarousel(movieListState = listUpcoming)
             Categories()
             ContentColumnMovieList(
                 movieList = listMostPopular,

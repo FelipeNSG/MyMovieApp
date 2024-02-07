@@ -41,6 +41,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,7 +70,9 @@ fun Details(
     navController: NavHostController,
     title: String, poster: String,
     movieCredits: List<MovieCast>,
-    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>
+    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
+    storyLine: String,
+    tagLine: String
 ) {
     Box(
         modifier = Modifier
@@ -245,11 +248,13 @@ fun Details(
                         )
                     )
                     Text(
-                        text = "Aqui va el texto del tag line",
+                        text = tagLine,
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.montserrat)),
                             color = Color.White,
-                        )
+                        ),
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = "Story Line",
@@ -259,8 +264,6 @@ fun Details(
                             color = Color.White,
                         )
                     )
-                    val comentario =
-                        "Black Manta, still driven by the need to avenge his father's death and wielding the power of the mythic Black Trident, will stop at nothing to take Aquaman down once and for all. "
                     Text(
                         buildAnnotatedString {
                             withStyle(
@@ -269,9 +272,9 @@ fun Details(
                                     fontFamily = FontFamily(Font(R.font.montserrat))
                                 )
                             ) {
-                                if (comentario.length <= 60 && comentario[59] != '.') {
-                                    append(comentario.plus("..."))
-                                } else append(comentario.substring(0, 60))
+                                if (storyLine.length <= 60 && storyLine[59] != '.') {
+                                    append(storyLine.plus("..."))
+                                } else append(storyLine.substring(0, 60))
 
                             }
                             withStyle(
@@ -280,14 +283,14 @@ fun Details(
                                     color = colorBlue
                                 )
                             ) {
-                                if (comentario.length > 60) {
+                                if (storyLine.length > 60) {
                                     append(" More")
                                 }
                             }
                         },
                     )
                     Text(
-                        text = "Cast and Crew",
+                        text = "Cast",
                         style = TextStyle(
                             fontSize = 17.sp,
                             fontFamily = FontFamily(Font(R.font.montserrat)),
@@ -295,15 +298,17 @@ fun Details(
                         )
                     )
                     Profiles(movieCredits)
-                    Text(
-                        text = "Gallery",
-                        style = TextStyle(
-                            fontSize = 17.sp,
-                            fontFamily = FontFamily(Font(R.font.montserrat)),
-                            color = Color.White,
+                    if (movieAndSeriesImagePoster.isNotEmpty()) {
+                        Text(
+                            text = "Gallery",
+                            style = TextStyle(
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily(Font(R.font.montserrat)),
+                                color = Color.White,
+                            )
                         )
-                    )
-                    ImageLazyRow( movieAndSeriesImagePoster)
+                        ImageLazyRow(movieAndSeriesImagePoster)
+                    }
                 }
             }
         }
@@ -313,6 +318,12 @@ fun Details(
 @Composable
 fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     var title by remember {
+        mutableStateOf("")
+    }
+    var storyLine by remember {
+        mutableStateOf("")
+    }
+    var tagLine by remember {
         mutableStateOf("")
     }
     var poster by remember {
@@ -335,16 +346,24 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
             movieDetails = MoviesRepository.getMovieDetails(id)
             title = movieDetails?.title ?: ""
             poster = movieDetails?.posterPath ?: ""
+            storyLine = movieDetails?.overview ?: ""
+            tagLine = movieDetails?.tagline ?: ""
             movieAndSeriesCredits = MoviesRepository.getMovieCredits(id)
-            movieAndSeriesImagePoster = MoviesRepository.getMovieImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
+                .filter { it.profilePath != "defaultProfilePath" }
+            movieAndSeriesImagePoster =
+                MoviesRepository.getMovieImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
 
         }
         if (id != null && type == "series") {
             seriesDetails = MoviesRepository.getSeriesDetails(id)
             title = seriesDetails?.title ?: ""
             poster = seriesDetails?.posterPath ?: ""
+            storyLine = movieDetails?.overview ?: ""
+            tagLine = movieDetails?.tagline ?: ""
             movieAndSeriesCredits = MoviesRepository.getSeriesCredits(id)
-            movieAndSeriesImagePoster = MoviesRepository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
+                .filter { it.profilePath != "defaultProfilePath" }
+            movieAndSeriesImagePoster =
+                MoviesRepository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
         }
     }
     BodyTemplate(container = containerColor,
@@ -356,7 +375,9 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
                 title,
                 poster,
                 movieAndSeriesCredits,
-                movieAndSeriesImagePoster
+                movieAndSeriesImagePoster,
+                storyLine,
+                tagLine
             )
         })
 }
