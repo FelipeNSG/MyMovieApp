@@ -335,7 +335,7 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
             movieDetails = MoviesRepository.getMovieDetails(id)
             title = movieDetails?.title ?: ""
             poster = movieDetails?.posterPath ?: ""
-            movieAndSeriesCredits = MoviesRepository.getMovieCredits(id)
+            movieAndSeriesCredits = MoviesRepository.getMovieCredits(id).filter { it.profilePath != "defaultProfilePath" }
             movieAndSeriesImagePoster = MoviesRepository.getMovieImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
 
         }
@@ -343,7 +343,7 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
             seriesDetails = MoviesRepository.getSeriesDetails(id)
             title = seriesDetails?.title ?: ""
             poster = seriesDetails?.posterPath ?: ""
-            movieAndSeriesCredits = MoviesRepository.getSeriesCredits(id)
+            movieAndSeriesCredits = MoviesRepository.getSeriesCredits(id).filter { it.profilePath != "defaultProfilePath" }
             movieAndSeriesImagePoster = MoviesRepository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
         }
     }
