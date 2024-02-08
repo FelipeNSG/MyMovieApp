@@ -135,7 +135,9 @@ object MoviesRepository {
     suspend fun getSeriesImagesPoster(id: Int): List<MovieAndSeriesImagePoster>{
         return try {
             val result = MovieClient.createMoviesService().getSeriesImagesPoster(id)
-            result.posters?.mapNotNull { it?.toMovieAndSeriesImagePoster() }?: emptyList()
+            result.posters?.mapNotNull {
+                it?.toMovieAndSeriesImagePoster()
+            }?: emptyList()
         }catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()

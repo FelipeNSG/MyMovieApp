@@ -75,7 +75,7 @@ fun MediaScreen(navController: NavHostController) {
         mutableStateOf(emptyList<Movie>())
     }
 
-    var movieListState by remember {
+    var listUpcoming by remember {
         mutableStateOf(emptyList<Movie>())
     }
 
@@ -89,8 +89,10 @@ fun MediaScreen(navController: NavHostController) {
         mutableStateOf(emptyList<Series>())
     }
     LaunchedEffect(Unit) {
+
+
         homeController.getUpcomingMovies{
-            movieListState = it
+            listUpcoming = it
         }
         homeController.getPopularMovies {
             listMostPopular = it
@@ -101,6 +103,7 @@ fun MediaScreen(navController: NavHostController) {
         homeController.getTopRate{
             listTopRate = it
         }
+
         homeController.getPopularSeries{
             listMostPopularSeries = it
         }
@@ -117,7 +120,7 @@ fun MediaScreen(navController: NavHostController) {
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            ContentBoxCarousel(movieListState = movieListState)
+            ContentBoxCarousel(movieListState = listUpcoming)
             Categories()
             ContentColumnMovieList(
                 movieList = listMostPopular,

@@ -2,7 +2,7 @@ package com.example.mymovieapp.network.client
 
 import com.example.mymovieapp.network.model.MovieList
 import com.example.mymovieapp.network.model.MovieListsWithDate
-import com.example.mymovieapp.network.model.movieandseriescredits.MovieAndSeriesCredits
+import com.example.mymovieapp.network.model.movieandseriescredit.MovieAndSeriesCredits
 import com.example.mymovieapp.network.model.movieandseriesimages.MovieAndSeriesImages
 import com.example.mymovieapp.network.model.moviedata.MovieId
 import com.example.mymovieapp.network.model.seriesdata.SeriesId

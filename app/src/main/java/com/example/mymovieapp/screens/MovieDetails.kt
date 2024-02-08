@@ -41,6 +41,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,7 +70,7 @@ fun Details(
     navController: NavHostController,
     title: String, poster: String,
     movieCredits: List<MovieCast>,
-    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>
+    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
 ) {
     Box(
         modifier = Modifier
@@ -244,12 +245,15 @@ fun Details(
                             color = Color.White,
                         )
                     )
+                    val comentario = "esto es un comentario que ira en el resumend de la pelicula"
                     Text(
-                        text = "Aqui va el texto del tag line",
+                        text = "tagLine",
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.montserrat)),
                             color = Color.White,
-                        )
+                        ),
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = "Story Line",
@@ -259,8 +263,6 @@ fun Details(
                             color = Color.White,
                         )
                     )
-                    val comentario =
-                        "Black Manta, still driven by the need to avenge his father's death and wielding the power of the mythic Black Trident, will stop at nothing to take Aquaman down once and for all. "
                     Text(
                         buildAnnotatedString {
                             withStyle(
@@ -269,9 +271,9 @@ fun Details(
                                     fontFamily = FontFamily(Font(R.font.montserrat))
                                 )
                             ) {
-                                if (comentario.length <= 60 && comentario[59] != '.') {
+                                if (comentario.length <= 60 && comentario.endsWith(".")) {
                                     append(comentario.plus("..."))
-                                } else append(comentario.substring(0, 60))
+                                } else append(comentario.substring(0, comentario.length))
 
                             }
                             withStyle(
@@ -287,7 +289,7 @@ fun Details(
                         },
                     )
                     Text(
-                        text = "Cast and Crew",
+                        text = "Cast",
                         style = TextStyle(
                             fontSize = 17.sp,
                             fontFamily = FontFamily(Font(R.font.montserrat)),
@@ -295,15 +297,17 @@ fun Details(
                         )
                     )
                     Profiles(movieCredits)
-                    Text(
-                        text = "Gallery",
-                        style = TextStyle(
-                            fontSize = 17.sp,
-                            fontFamily = FontFamily(Font(R.font.montserrat)),
-                            color = Color.White,
+                    if (movieAndSeriesImagePoster.isNotEmpty()) {
+                        Text(
+                            text = "Gallery",
+                            style = TextStyle(
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily(Font(R.font.montserrat)),
+                                color = Color.White,
+                            )
                         )
-                    )
-                    ImageLazyRow( movieAndSeriesImagePoster)
+                        ImageLazyRow(movieAndSeriesImagePoster)
+                    }
                 }
             }
         }
@@ -313,6 +317,12 @@ fun Details(
 @Composable
 fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     var title by remember {
+        mutableStateOf("")
+    }
+    var storyLine by remember {
+        mutableStateOf("")
+    }
+    var tagLine by remember {
         mutableStateOf("")
     }
     var poster by remember {
@@ -345,6 +355,7 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
             poster = seriesDetails?.posterPath ?: ""
             movieAndSeriesCredits = MoviesRepository.getSeriesCredits(id).filter { it.profilePath != "defaultProfilePath" }
             movieAndSeriesImagePoster = MoviesRepository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
+
         }
     }
     BodyTemplate(container = containerColor,
@@ -356,7 +367,7 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
                 title,
                 poster,
                 movieAndSeriesCredits,
-                movieAndSeriesImagePoster
+                movieAndSeriesImagePoster,
             )
         })
 }

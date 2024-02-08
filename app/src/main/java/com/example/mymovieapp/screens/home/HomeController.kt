@@ -6,6 +6,10 @@ import com.example.mymovieapp.movies.Series
 class HomeController(
     private val model: HomeModel
 ) {
+    suspend fun getUpcomingMovies(callback: (List<Movie>) -> Unit) {
+        val movies = model.getUpcomingMovies()
+        callback.invoke(movies)
+    }
     suspend fun getPopularMovies(callback: (List<Movie>) -> Unit) {
         val movies = model.getPopularMovies()
         callback.invoke(movies)
@@ -16,11 +20,6 @@ class HomeController(
         callback.invoke(movies)
     }
 
-    suspend fun getUpcomingMovies(callback: (List<Movie>) -> Unit) {
-        val movies = model.getUpcomingMovies()
-        callback.invoke(movies)
-
-    }
 
     suspend fun getTopRate(callback: (List<Movie>) -> Unit) {
         val movies = model.getTopRate()
@@ -31,5 +30,4 @@ class HomeController(
         val series = model.getPopularSeries()
         callback.invoke(series)
     }
-
 }
