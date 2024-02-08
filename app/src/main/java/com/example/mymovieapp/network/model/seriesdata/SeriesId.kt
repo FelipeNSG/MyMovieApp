@@ -9,7 +9,7 @@ data class SeriesId(
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("genres")
-    val genres: List<Genre?>?,
+    val genres: List<Genres>?,
     @SerializedName("id")
     val id: Int?,
     @SerializedName("last_air_date")

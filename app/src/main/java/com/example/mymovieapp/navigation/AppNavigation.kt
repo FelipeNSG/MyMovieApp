@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mymovieapp.screens.home.MediaScreen
-import com.example.mymovieapp.screens.MovieDetails
+import com.example.mymovieapp.screens.details.MovieDetails
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.mymovieapp.screens
+package com.example.mymovieapp.screens.details
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,11 +52,9 @@ import com.example.mymovieapp.common.BodyTemplate
 import com.example.mymovieapp.common.ImageLazyRow
 import com.example.mymovieapp.common.Profiles
 import com.example.mymovieapp.common.TopAppBarTemplate
-import com.example.mymovieapp.data.repository.MoviesRepository
 import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
-import com.example.mymovieapp.movies.MovieDetails
-import com.example.mymovieapp.movies.SeriesDetails
+import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import com.example.mymovieapp.movies.imageMovieUrl
 import com.example.mymovieapp.ui.theme.colorBlue
 import com.example.mymovieapp.ui.theme.colorGray
@@ -68,10 +66,12 @@ import com.example.mymovieapp.ui.theme.containerColor
 @Composable
 fun Details(
     navController: NavHostController,
-    title: String, poster: String,
     movieCredits: List<MovieCast>,
     movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
+    movieAndSeriesDetails: MovieAndSeriesDetails
 ) {
+    val storyLine = movieAndSeriesDetails._overview
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +82,7 @@ fun Details(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(550.dp),
-            model = imageMovieUrl(poster),
+            model = imageMovieUrl(movieAndSeriesDetails._posterPath),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             alpha = 0.15f
@@ -94,7 +94,8 @@ fun Details(
                 .verticalScroll(rememberScrollState())
         ) {
             TopAppBarTemplate(
-                title = title, secondIcon = true,
+                title = movieAndSeriesDetails._title,
+                secondIcon = true,
                 navController
             )
             Column(
@@ -106,7 +107,7 @@ fun Details(
                     modifier = Modifier
                         .width(260.dp)
                         .height(360.dp),
-                    model = imageMovieUrl(poster),
+                    model = imageMovieUrl(movieAndSeriesDetails._posterPath),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                 )
@@ -125,7 +126,6 @@ fun Details(
                     Text(
                         text = "2024",
                         color = colorGray,
-
                         )
                     Icon(
                         modifier = Modifier
@@ -143,10 +143,18 @@ fun Details(
                         contentDescription = "Duration",
                         tint = colorGray
                     )
-                    Text(
-                        text = "148 minutes",
-                        color = colorGray,
-                    )
+                    if (movieAndSeriesDetails._type == "movie"){
+                        Text(
+                            text = "${movieAndSeriesDetails._runtime} minutes",
+                            color = colorGray,
+                        )
+                    }else {
+                        Text(
+                            text = "100 minutes",
+                            color = colorGray,
+                        )
+                    }
+
                     Icon(
                         modifier = Modifier
                             .height(18.dp)
@@ -161,11 +169,20 @@ fun Details(
                         tint = colorGray,
                         contentDescription = null
                     )
-                    Text(
-                        text = "Action",
-                        color = colorGray,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
+                    if (movieAndSeriesDetails._type == "movie"){
+                        Text(
+                            text = movieAndSeriesDetails._genre[0].name,
+                            color = colorGray,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    } else {
+                        Text(
+                            text = movieAndSeriesDetails._genres[0].name,
+                            color = colorGray,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -176,7 +193,9 @@ fun Details(
                         contentDescription = "Duration",
                         tint = colorOrange
                     )
-                    Text(text = "4.5", color = colorOrange)
+                    Text(text = String.format("%.1f", (movieAndSeriesDetails._voteAverage)),
+                        color = colorOrange
+                    )
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(18.dp),
@@ -198,7 +217,8 @@ fun Details(
                             Text(
                                 text = "Play", modifier = Modifier.padding(start = 6.dp)
                             )
-                        })
+                        }
+                    )
                     IconButton(
                         onClick = { },
                         modifier = Modifier
@@ -231,30 +251,34 @@ fun Details(
                         )
                     }
                 }
+
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
 
-                    Text(
-                        text = "Tag Line",
-                        style = TextStyle(
-                            fontSize = 17.sp,
-                            fontFamily = FontFamily(Font(R.font.montserrat)),
-                            color = Color.White,
+                    if (movieAndSeriesDetails._tagline != "") {
+                        Text(
+                            text = "Tag Line",
+                            style = TextStyle(
+                                fontSize = 17.sp,
+                                fontFamily = FontFamily(Font(R.font.montserrat)),
+                                color = Color.White,
+                            )
                         )
-                    )
-                    val comentario = "esto es un comentario que ira en el resumend de la pelicula"
-                    Text(
-                        text = "tagLine",
-                        style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.montserrat)),
-                            color = Color.White,
-                        ),
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis
-                    )
+
+                        Text(
+                            text = movieAndSeriesDetails._tagline,
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.montserrat)),
+                                color = Color.White,
+                            ),
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
                     Text(
                         text = "Story Line",
                         style = TextStyle(
@@ -264,6 +288,7 @@ fun Details(
                         )
                     )
                     Text(
+
                         buildAnnotatedString {
                             withStyle(
                                 style = SpanStyle(
@@ -271,9 +296,9 @@ fun Details(
                                     fontFamily = FontFamily(Font(R.font.montserrat))
                                 )
                             ) {
-                                if (comentario.length <= 60 && comentario.endsWith(".")) {
-                                    append(comentario.plus("..."))
-                                } else append(comentario.substring(0, comentario.length))
+                                if (storyLine.length <= 60 && storyLine.endsWith(".")) {
+                                    append(storyLine.plus("..."))
+                                } else append(storyLine.substring(0, 59))
 
                             }
                             withStyle(
@@ -282,11 +307,13 @@ fun Details(
                                     color = colorBlue
                                 )
                             ) {
-                                if (comentario.length > 60) {
+                                if (storyLine.length > 60) {
                                     append(" More")
                                 }
                             }
                         },
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = "Cast",
@@ -316,59 +343,60 @@ fun Details(
 
 @Composable
 fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
-    var title by remember {
-        mutableStateOf("")
-    }
-    var storyLine by remember {
-        mutableStateOf("")
-    }
-    var tagLine by remember {
-        mutableStateOf("")
-    }
-    var poster by remember {
-        mutableStateOf("")
-    }
-    var movieDetails: MovieDetails? by remember {
+    val detailsController = DetailsController(
+        DetailsModel()
+    )
+
+    var movieAndSeriesDetails: MovieAndSeriesDetails? by remember {
         mutableStateOf(null)
     }
-    var seriesDetails: SeriesDetails? by remember {
-        mutableStateOf(null)
-    }
+
     var movieAndSeriesCredits by remember {
         mutableStateOf(emptyList<MovieCast>())
     }
     var movieAndSeriesImagePoster by remember {
         mutableStateOf(emptyList<MovieAndSeriesImagePoster>())
     }
+
     LaunchedEffect(Unit) {
         if (id != null && type == "movie") {
-            movieDetails = MoviesRepository.getMovieDetails(id)
-            title = movieDetails?.title ?: ""
-            poster = movieDetails?.posterPath ?: ""
-            movieAndSeriesCredits = MoviesRepository.getMovieCredits(id).filter { it.profilePath != "defaultProfilePath" }
-            movieAndSeriesImagePoster = MoviesRepository.getMovieImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
-
+            detailsController.getMovieDetails(id) {
+                movieAndSeriesDetails = it
+            }
+            detailsController.getMovieCredits(id) { credits ->
+                movieAndSeriesCredits = credits.filter { it.profilePath != "defaultProfilePath" }
+            }
+            detailsController.getMovieImagesPoster(id) { images ->
+                movieAndSeriesImagePoster = images.filter { it.iso6391 == "en" }.shuffled()
+            }
         }
         if (id != null && type == "series") {
-            seriesDetails = MoviesRepository.getSeriesDetails(id)
-            title = seriesDetails?.title ?: ""
-            poster = seriesDetails?.posterPath ?: ""
-            movieAndSeriesCredits = MoviesRepository.getSeriesCredits(id).filter { it.profilePath != "defaultProfilePath" }
-            movieAndSeriesImagePoster = MoviesRepository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }.shuffled()
-
+            detailsController.getSeriesDetails(id) {
+                movieAndSeriesDetails = it
+            }
+            detailsController.getSeriesCredits(id) { credits ->
+                movieAndSeriesCredits = credits.filter { it.profilePath != "defaultProfilePath" }
+            }
+            detailsController.getSeriesImagesPoster(id) { images ->
+                movieAndSeriesImagePoster = images.filter { it.iso6391 == "en" }.shuffled()
+            }
         }
     }
-    BodyTemplate(container = containerColor,
-        topBar = { },
-        bottomBar = { },
-        body = {
-            Details(
-                navController,
-                title,
-                poster,
-                movieAndSeriesCredits,
-                movieAndSeriesImagePoster,
-            )
-        })
+
+    if (movieAndSeriesDetails != null) {
+        BodyTemplate(
+            container = containerColor,
+            topBar = { },
+            bottomBar = { },
+            body = {
+                Details(
+                    navController,
+                    movieAndSeriesCredits,
+                    movieAndSeriesImagePoster,
+                    movieAndSeriesDetails!!
+                )
+            }
+        )
+    }
 }
 

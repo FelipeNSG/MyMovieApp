@@ -9,9 +9,8 @@ import com.example.mymovieapp.domain.mappers.toSeriesDetails
 import com.example.mymovieapp.movies.Movie
 import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
-import com.example.mymovieapp.movies.MovieDetails
 import com.example.mymovieapp.movies.Series
-import com.example.mymovieapp.movies.SeriesDetails
+import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import com.example.mymovieapp.network.client.MovieClient
 import retrofit2.HttpException
 
@@ -83,7 +82,7 @@ object MoviesRepository {
         }
     }
 
-    suspend fun getMovieDetails(id: Int): MovieDetails? {
+    suspend fun getMovieDetails(id: Int): MovieAndSeriesDetails? {
         return try {
             val result = MovieClient.createMoviesService().getMovieDetails(id)
             result.toMovieDetails()
@@ -93,7 +92,7 @@ object MoviesRepository {
         }
     }
 
-    suspend fun getSeriesDetails(id: Int): SeriesDetails? {
+    suspend fun getSeriesDetails(id: Int): MovieAndSeriesDetails? {
         return try {
             val result = MovieClient.createMoviesService().getSeriesDetails(id)
             result.toSeriesDetails()

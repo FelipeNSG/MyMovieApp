@@ -3,9 +3,8 @@ package com.example.mymovieapp.domain.mappers
 import com.example.mymovieapp.movies.Movie
 import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
-import com.example.mymovieapp.movies.MovieDetails
 import com.example.mymovieapp.movies.Series
-import com.example.mymovieapp.movies.SeriesDetails
+import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import com.example.mymovieapp.network.model.Result
 import com.example.mymovieapp.network.model.movieandseriescredit.Cast
 import com.example.mymovieapp.network.model.movieandseriesimages.Poster
@@ -32,23 +31,28 @@ fun Result.toSeries(): Series {
     )
 }
 
-fun MovieId.toMovieDetails(): MovieDetails {
+fun MovieId.toMovieDetails():MovieAndSeriesDetails {
     // mapper
-    return MovieDetails(
+    return MovieAndSeriesDetails(
         id = this.id ?: Int.MIN_VALUE,
         title = this.title ?: "unknown",
-        genres = this.genres ?: emptyList(),
+        genre = this.genres ?: emptyList(),
         runtime = this.runtime ?: Int.MIN_VALUE,
         tagline = this.tagline ?: "unknown",
         overview = this.overview ?: "unknown",
         posterPath = this.posterPath ?: "default_poster",
         releaseDate = this.releaseDate ?: "unknown",
         voteAverage = this.voteAverage ?: 0.0,
+        //series
+        type = "movie",
+        genres = emptyList(),
+        numberOfSeason = Int.MIN_VALUE,
+        lastAirDate = "Unknown",
     )
 }
 
-fun SeriesId.toSeriesDetails(): SeriesDetails {
-    return SeriesDetails(
+fun SeriesId.toSeriesDetails(): MovieAndSeriesDetails {
+    return MovieAndSeriesDetails(
         id = this.id ?: Int.MIN_VALUE,
         title = this.name ?: "unknown",
         genres = this.genres ?: emptyList(),
@@ -58,9 +62,17 @@ fun SeriesId.toSeriesDetails(): SeriesDetails {
         posterPath = this.posterPath ?: "default_poster",
         lastAirDate = this.lastAirDate ?: "unknown",
         voteAverage = this.voteAverage ?: 0.0,
-        backdropPath = this.backdropPath ?: "default_backdropPath"
+        //movie
+        type = "series",
+        genre = emptyList(),
+        runtime = Int.MIN_VALUE,
+        releaseDate = "Unknown",
+
+
     )
 }
+
+
 
 fun Cast.toMovieAndSeriesCast(): MovieCast {
     return MovieCast(
