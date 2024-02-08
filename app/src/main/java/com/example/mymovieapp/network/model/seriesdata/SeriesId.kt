@@ -12,8 +12,8 @@ data class SeriesId(
     val genres: List<Genres>?,
     @SerializedName("id")
     val id: Int?,
-    @SerializedName("last_air_date")
-    val lastAirDate: String?,
+    @SerializedName("first_air_date")
+    val firstAirDate: String?,
     @SerializedName("name")
     val name: String?,
     @SerializedName("overview")
@@ -23,5 +23,7 @@ data class SeriesId(
     @SerializedName("tagline")
     val tagline: String?,
     @SerializedName("vote_average")
-    val voteAverage: Double?
+    val voteAverage: Double?,
+    @SerializedName("episode_run_time")
+    val episodeRunTime: List<Int>?
 )

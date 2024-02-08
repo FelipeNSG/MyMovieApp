@@ -16,7 +16,8 @@ data class MovieDetails(
     //series
     val genres: List<Genres> = emptyList(),
     val numberOfSeason: Int = Int.MIN_VALUE,
-    val lastAirDate: String = "Unknown",
+    val firstAirDate: String = "Unknown",
+    val episodeRunTime: List<Int> = emptyList(),
     val type:String = "movie"
 ):MovieAndSeriesDetails(
     type,
@@ -31,5 +32,6 @@ data class MovieDetails(
     voteAverage ,
     genres,
     numberOfSeason,
-    lastAirDate,
+    firstAirDate,
+    episodeRunTime
 )

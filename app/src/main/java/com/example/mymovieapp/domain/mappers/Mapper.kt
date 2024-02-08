@@ -47,7 +47,8 @@ fun MovieId.toMovieDetails():MovieAndSeriesDetails {
         type = "movie",
         genres = emptyList(),
         numberOfSeason = Int.MIN_VALUE,
-        lastAirDate = "Unknown",
+        firstAirDate = "Unknown",
+        episodeRunTime = emptyList()
     )
 }
 
@@ -60,8 +61,9 @@ fun SeriesId.toSeriesDetails(): MovieAndSeriesDetails {
         tagline = this.tagline ?: "unknown",
         overview = this.overview ?: "unknown",
         posterPath = this.posterPath ?: "default_poster",
-        lastAirDate = this.lastAirDate ?: "unknown",
+        firstAirDate = this.firstAirDate ?: "unknown",
         voteAverage = this.voteAverage ?: 0.0,
+        episodeRunTime = this.episodeRunTime ?: emptyList(),
         //movie
         type = "series",
         genre = emptyList(),
@@ -69,10 +71,9 @@ fun SeriesId.toSeriesDetails(): MovieAndSeriesDetails {
         releaseDate = "Unknown",
 
 
+
     )
 }
-
-
 
 fun Cast.toMovieAndSeriesCast(): MovieCast {
     return MovieCast(

@@ -123,10 +123,17 @@ fun Details(
                         tint = colorGray,
                         contentDescription = null
                     )
-                    Text(
-                        text = "2024",
-                        color = colorGray,
+                    if (movieAndSeriesDetails._type == "movie"){
+                        Text(
+                            text = movieAndSeriesDetails._releaseDate.take(4),
+                            color = colorGray,
                         )
+                    }else{
+                        Text(
+                            text = movieAndSeriesDetails._firstAirDate.take(4),
+                            color = colorGray,
+                        )
+                    }
                     Icon(
                         modifier = Modifier
                             .height(18.dp)
@@ -150,7 +157,7 @@ fun Details(
                         )
                     }else {
                         Text(
-                            text = "100 minutes",
+                            text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
                             color = colorGray,
                         )
                     }

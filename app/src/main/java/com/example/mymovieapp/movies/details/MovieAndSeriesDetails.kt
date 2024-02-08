@@ -18,7 +18,8 @@ open class MovieAndSeriesDetails(
     //Series
      genres:  List<Genres>,
      numberOfSeason: Int,
-     lastAirDate: String,
+     firstAirDate: String,
+     episodeRunTime: List<Int>
 ) {
      val _type = type
      val _id = id
@@ -32,6 +33,7 @@ open class MovieAndSeriesDetails(
      val _voteAverage = voteAverage
      val _genres = genres
      val _numberOfSeason = numberOfSeason
-     val _lastAirDate = lastAirDate
+     val _firstAirDate = firstAirDate
+     val _episodeRunTime = episodeRunTime
 }
 

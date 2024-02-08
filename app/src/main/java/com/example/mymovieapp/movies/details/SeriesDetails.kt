@@ -11,8 +11,9 @@ data class SeriesDetails(
     val tagline: String,
     val overview: String,
     val posterPath: String,
-    val lastAirDate: String,
+    val firstAirDate: String,
     val voteAverage: Double,
+    val episodeRunTime: List<Int>,
     //movie
     val genre: List<Genre> = emptyList(),
     val releaseDate: String = "Unknown",
@@ -32,5 +33,6 @@ data class SeriesDetails(
     voteAverage,
     genres,
     numberOfSeason,
-    lastAirDate
+    firstAirDate,
+    episodeRunTime
 )
