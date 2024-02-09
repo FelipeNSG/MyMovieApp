@@ -64,292 +64,8 @@ import com.example.mymovieapp.ui.theme.colorWhite
 import com.example.mymovieapp.ui.theme.containerColor
 
 @Composable
-fun Details(
-    navController: NavHostController,
-    movieCredits: List<MovieCast>,
-    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
-    movieAndSeriesDetails: MovieAndSeriesDetails
-) {
-    val storyLine = movieAndSeriesDetails._overview
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(containerColor),
-
-        ) {
-        SubcomposeAsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(550.dp),
-            model = imageMovieUrl(movieAndSeriesDetails._posterPath),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            alpha = 0.15f
-        )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-        ) {
-            TopAppBarTemplate(
-                title = movieAndSeriesDetails._title,
-                secondIcon = true,
-                navController
-            )
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SubcomposeAsyncImage(
-                    modifier = Modifier
-                        .width(260.dp)
-                        .height(360.dp),
-                    model = imageMovieUrl(movieAndSeriesDetails._posterPath),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                )
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .height(18.dp)
-                            .padding(horizontal = 8.dp),
-                        painter = painterResource(id = R.drawable.calendar),
-                        tint = colorGray,
-                        contentDescription = null
-                    )
-                    if (movieAndSeriesDetails._type == "movie"){
-                        Text(
-                            text = movieAndSeriesDetails._releaseDate.take(4),
-                            color = colorGray,
-                        )
-                    }else{
-                        Text(
-                            text = movieAndSeriesDetails._firstAirDate.take(4),
-                            color = colorGray,
-                        )
-                    }
-                    Icon(
-                        modifier = Modifier
-                            .height(18.dp)
-                            .padding(horizontal = 8.dp),
-                        painter = painterResource(id = R.drawable.separator),
-                        tint = colorGray,
-                        contentDescription = null
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .height(18.dp)
-                            .padding(end = 8.dp),
-                        imageVector = Icons.Default.Schedule,
-                        contentDescription = "Duration",
-                        tint = colorGray
-                    )
-                    if (movieAndSeriesDetails._type == "movie"){
-                        Text(
-                            text = "${movieAndSeriesDetails._runtime} minutes",
-                            color = colorGray,
-                        )
-                    }else {
-                        Text(
-                            text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
-                            color = colorGray,
-                        )
-                    }
-
-                    Icon(
-                        modifier = Modifier
-                            .height(18.dp)
-                            .padding(horizontal = 8.dp),
-                        painter = painterResource(id = R.drawable.separator),
-                        tint = colorGray,
-                        contentDescription = null
-                    )
-                    Icon(
-                        modifier = Modifier.height(18.dp),
-                        painter = painterResource(id = R.drawable.category),
-                        tint = colorGray,
-                        contentDescription = null
-                    )
-                    if (movieAndSeriesDetails._type == "movie"){
-                        Text(
-                            text = movieAndSeriesDetails._genre[0].name,
-                            color = colorGray,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                    } else {
-                        Text(
-                            text = movieAndSeriesDetails._genres[0].name,
-                            color = colorGray,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                    }
-
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.star),
-                        contentDescription = "Duration",
-                        tint = colorOrange
-                    )
-                    Text(text = String.format("%.1f", (movieAndSeriesDetails._voteAverage)),
-                        color = colorOrange
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(18.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Button(modifier = Modifier
-                        .width(110.dp)
-                        .height(40.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorOrange
-                        ),
-                        onClick = { /*TODO*/ },
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Duration",
-                                tint = colorWhite
-                            )
-                            Text(
-                                text = "Play", modifier = Modifier.padding(start = 6.dp)
-                            )
-                        }
-                    )
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(40.dp),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = colorLightBlack
-                        )
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.download),
-                            contentDescription = "content description",
-                            tint = colorOrange
-                        )
-
-                    }
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(40.dp),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = colorLightBlack
-                        )
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.share),
-                            contentDescription = "content description",
-                            tint = colorBlue
-                        )
-                    }
-                }
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-
-                    if (movieAndSeriesDetails._tagline != "") {
-                        Text(
-                            text = "Tag Line",
-                            style = TextStyle(
-                                fontSize = 17.sp,
-                                fontFamily = FontFamily(Font(R.font.montserrat)),
-                                color = Color.White,
-                            )
-                        )
-
-                        Text(
-                            text = movieAndSeriesDetails._tagline,
-                            style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.montserrat)),
-                                color = Color.White,
-                            ),
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-
-                    Text(
-                        text = "Story Line",
-                        style = TextStyle(
-                            fontSize = 17.sp,
-                            fontFamily = FontFamily(Font(R.font.montserrat)),
-                            color = Color.White,
-                        )
-                    )
-                    Text(
-
-                        buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    color = colorWhite,
-                                    fontFamily = FontFamily(Font(R.font.montserrat))
-                                )
-                            ) {
-                                if (storyLine.length <= 60 && storyLine.endsWith(".")) {
-                                    append(storyLine.plus("..."))
-                                } else append(storyLine.substring(0, 59))
-
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    color = colorBlue
-                                )
-                            ) {
-                                if (storyLine.length > 60) {
-                                    append(" More")
-                                }
-                            }
-                        },
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "Cast",
-                        style = TextStyle(
-                            fontSize = 17.sp,
-                            fontFamily = FontFamily(Font(R.font.montserrat)),
-                            color = Color.White,
-                        )
-                    )
-                    Profiles(movieCredits)
-                    if (movieAndSeriesImagePoster.isNotEmpty()) {
-                        Text(
-                            text = "Gallery",
-                            style = TextStyle(
-                                fontSize = 17.sp,
-                                fontFamily = FontFamily(Font(R.font.montserrat)),
-                                color = Color.White,
-                            )
-                        )
-                        ImageLazyRow(movieAndSeriesImagePoster)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
+
     val detailsController = DetailsController(
         DetailsModel()
     )
@@ -366,44 +82,374 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     }
 
     LaunchedEffect(Unit) {
-        if (id != null && type == "movie") {
-            detailsController.getMovieDetails(id) {
-                movieAndSeriesDetails = it
-            }
-            detailsController.getMovieCredits(id) { credits ->
-                movieAndSeriesCredits = credits.filter { it.profilePath != "defaultProfilePath" }
-            }
-            detailsController.getMovieImagesPoster(id) { images ->
-                movieAndSeriesImagePoster = images.filter { it.iso6391 == "en" }.shuffled()
-            }
+        detailsController.validationMovieAndSeriesDetails(id, type) {
+            movieAndSeriesDetails = it
         }
-        if (id != null && type == "series") {
-            detailsController.getSeriesDetails(id) {
-                movieAndSeriesDetails = it
-            }
-            detailsController.getSeriesCredits(id) { credits ->
-                movieAndSeriesCredits = credits.filter { it.profilePath != "defaultProfilePath" }
-            }
-            detailsController.getSeriesImagesPoster(id) { images ->
-                movieAndSeriesImagePoster = images.filter { it.iso6391 == "en" }.shuffled()
-            }
+        detailsController.validationMovieAndSeriesCredits(id, type) { credits ->
+            movieAndSeriesCredits = credits.filter { it.profilePath != "defaultProfilePath" }
+
+        }
+        detailsController.validationMovieAndSeriesImagePoster(id, type) { images ->
+            movieAndSeriesImagePoster = images.filter { it.iso6391 == "en" }.shuffled()
         }
     }
 
-    if (movieAndSeriesDetails != null) {
-        BodyTemplate(
-            container = containerColor,
-            topBar = { },
-            bottomBar = { },
-            body = {
-                Details(
-                    navController,
-                    movieAndSeriesCredits,
-                    movieAndSeriesImagePoster,
-                    movieAndSeriesDetails!!
-                )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = containerColor),
+    ) {
+
+        if (movieAndSeriesDetails != null) {
+            BodyTemplate(
+                container = containerColor,
+                topBar = { },
+                bottomBar = { },
+                body = {
+                    Details(
+                        navController,
+                        movieAndSeriesCredits,
+                        movieAndSeriesImagePoster,
+                        movieAndSeriesDetails!!
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun Details(
+    navController: NavHostController,
+    movieCredits: List<MovieCast>,
+    movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
+    movieAndSeriesDetails: MovieAndSeriesDetails
+) {
+    val storyLine = movieAndSeriesDetails._overview
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        ImageFromTheMovieOrSeriesForScreenBackground(movieAndSeriesDetails = movieAndSeriesDetails)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            TopAppBarTemplate(
+                title = movieAndSeriesDetails._title,
+                secondIcon = true,
+                navController
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                MainImageOfTheMovieOrSeries(movieAndSeriesDetails = movieAndSeriesDetails)
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ShowCalendarIconAndReleaseYearOfTheMovieOrSeries(movieAndSeriesDetails = movieAndSeriesDetails)
+                    ShowIconToSeparateContent()
+                    ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails = movieAndSeriesDetails)
+                    ShowIconToSeparateContent()
+                    ShowDescriptionIconAndCategoryOfTheMovieOrSeries(movieAndSeriesDetails = movieAndSeriesDetails)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ShowRatingOfMovieOrSeries(movieAndSeriesDetails = movieAndSeriesDetails)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(18.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ShowButtonPlayDownloadAndShare()
+                }
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    ShowTagLine(movieAndSeriesDetails = movieAndSeriesDetails)
+                    ShowStoryLine(storyLine = storyLine)
+                    ShowCastImage(movieCredits = movieCredits)
+                    ShowImageGallery(movieAndSeriesImagePoster = movieAndSeriesImagePoster)
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun ImageFromTheMovieOrSeriesForScreenBackground(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    SubcomposeAsyncImage(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(550.dp),
+        model = imageMovieUrl(movieAndSeriesDetails._posterPath),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        alpha = 0.15f
+    )
+}
+
+@Composable
+fun MainImageOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    SubcomposeAsyncImage(
+        modifier = Modifier
+            .width(260.dp)
+            .height(360.dp),
+        model = imageMovieUrl(movieAndSeriesDetails._posterPath),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+    )
+}
+
+@Composable
+fun ShowCalendarIconAndReleaseYearOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    Icon(
+        modifier = Modifier
+            .height(18.dp)
+            .padding(horizontal = 8.dp),
+        painter = painterResource(id = R.drawable.calendar),
+        tint = colorGray,
+        contentDescription = null
+    )
+    if (movieAndSeriesDetails._type == "movie") {
+        Text(
+            text = movieAndSeriesDetails._releaseDate.take(4),
+            color = colorGray,
+        )
+    } else {
+        Text(
+            text = movieAndSeriesDetails._firstAirDate.take(4),
+            color = colorGray,
         )
     }
 }
+
+@Composable
+fun ShowIconToSeparateContent() {
+    Icon(
+        modifier = Modifier
+            .height(18.dp)
+            .padding(horizontal = 8.dp),
+        painter = painterResource(id = R.drawable.separator),
+        tint = colorGray,
+        contentDescription = "Icon to separated Content"
+    )
+}
+
+@Composable
+fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    Icon(
+        modifier = Modifier
+            .height(18.dp)
+            .padding(end = 8.dp),
+        imageVector = Icons.Default.Schedule,
+        contentDescription = "Duration",
+        tint = colorGray
+    )
+    if (movieAndSeriesDetails._type == "movie") {
+        Text(
+            text = "${movieAndSeriesDetails._runtime} minutes",
+            color = colorGray,
+        )
+    } else {
+        Text(
+            text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
+            color = colorGray,
+        )
+    }
+}
+
+@Composable
+fun ShowDescriptionIconAndCategoryOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    Icon(
+        modifier = Modifier.height(18.dp),
+        painter = painterResource(id = R.drawable.category),
+        tint = colorGray,
+        contentDescription = "Icon Category"
+    )
+    if (movieAndSeriesDetails._type == "movie") {
+        Text(
+            text = movieAndSeriesDetails._genre[0].name,
+            color = colorGray,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+    } else {
+        Text(
+            text = movieAndSeriesDetails._genres[0].name,
+            color = colorGray,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun ShowRatingOfMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    Icon(
+        painter = painterResource(id = R.drawable.star),
+        contentDescription = "Star Icon",
+        tint = colorOrange
+    )
+    Text(
+        text = String.format("%.1f", (movieAndSeriesDetails._voteAverage)),
+        color = colorOrange
+    )
+}
+
+@Composable
+fun ShowButtonPlayDownloadAndShare() {
+    Button(modifier = Modifier
+        .width(110.dp)
+        .height(40.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorOrange
+        ),
+        onClick = { /*TODO*/ },
+        content = {
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = "Button Play",
+                tint = colorWhite
+            )
+            Text(
+                text = "Play", modifier = Modifier.padding(start = 6.dp)
+            )
+        }
+    )
+    IconButton(
+        onClick = { },
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(40.dp),
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = colorLightBlack
+        )
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.download),
+            contentDescription = "Button Download",
+            tint = colorOrange
+        )
+
+    }
+    IconButton(
+        onClick = { },
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(40.dp),
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = colorLightBlack
+        )
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.share),
+            contentDescription = "Button Share",
+            tint = colorBlue
+        )
+    }
+}
+
+@Composable
+fun ShowTagLine(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    if (movieAndSeriesDetails._tagline != "") {
+        Text(
+            text = "Tag Line",
+            style = TextStyle(
+                fontSize = 17.sp,
+                fontFamily = FontFamily(Font(R.font.montserrat)),
+                color = Color.White,
+            )
+        )
+        Text(
+            text = movieAndSeriesDetails._tagline,
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.montserrat)),
+                color = Color.White,
+            ),
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun ShowStoryLine(storyLine: String) {
+    if (storyLine.isNotEmpty()) {
+        Text(
+            text = "Story Line",
+            style = TextStyle(
+                fontSize = 17.sp,
+                fontFamily = FontFamily(Font(R.font.montserrat)),
+                color = Color.White,
+            )
+        )
+        Text(
+            buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = colorWhite,
+                        fontFamily = FontFamily(Font(R.font.montserrat))
+                    )
+                ) {
+                    if (storyLine.length <= 60 && storyLine.endsWith(".")) {
+                        append(storyLine.plus("..."))
+                    } else append(storyLine.substring(0, 59))
+
+                }
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = colorBlue
+                    )
+                ) {
+                    if (storyLine.length > 60) {
+                        append(" More")
+                    }
+                }
+            },
+            maxLines = 4,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun ShowCastImage(movieCredits: List<MovieCast>) {
+    if (movieCredits.isNotEmpty()) {
+        Text(
+            text = "Cast",
+            style = TextStyle(
+                fontSize = 17.sp,
+                fontFamily = FontFamily(Font(R.font.montserrat)),
+                color = Color.White,
+            )
+        )
+        Profiles(movieCredits)
+    }
+}
+
+@Composable
+fun ShowImageGallery(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>) {
+    if (movieAndSeriesImagePoster.isNotEmpty()) {
+        Text(
+            text = "Gallery",
+            style = TextStyle(
+                fontSize = 17.sp,
+                fontFamily = FontFamily(Font(R.font.montserrat)),
+                color = Color.White,
+            )
+        )
+        ImageLazyRow(movieAndSeriesImagePoster)
+    }
+}
+
+
 

@@ -8,12 +8,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 //TODO(BuildConfig)
 object MovieClient {
 
-    /*val intercepter = HttpLoggingInterceptor().apply {
+    val intercepter = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
-    }*/
+    }
 
     private val client = OkHttpClient.Builder()
-       /* .addInterceptor(intercepter)*/
+        .addInterceptor(intercepter)
         .authenticator(Authentication())
         .build()
 

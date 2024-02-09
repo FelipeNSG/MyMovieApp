@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.mymovieapp.screens.home.MediaScreen
 import com.example.mymovieapp.screens.details.MovieDetails
+import com.example.mymovieapp.screens.home.MediaScreen
 
 
 @Composable
@@ -17,7 +17,6 @@ fun AppNavigation() {
         composable(AppScreen.Home.route) {
             MediaScreen(navController = navController)
         }
-
         composable(
             AppScreen.MovieDetails.route + "/{id}/{type}",
             arguments = listOf(

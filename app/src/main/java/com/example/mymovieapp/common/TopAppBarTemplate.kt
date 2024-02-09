@@ -25,9 +25,7 @@ import com.example.mymovieapp.ui.theme.colorWhite
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHostController ) {
-    Row(
-
-    ) {
+    Row {
 
         CenterAlignedTopAppBar(
             modifier = Modifier
@@ -72,6 +70,7 @@ fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHos
                         )
                     }
                 } else {
+
                 }
             }
         )

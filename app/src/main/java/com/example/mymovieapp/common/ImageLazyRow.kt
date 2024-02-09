@@ -1,7 +1,9 @@
 package com.example.mymovieapp.common
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +21,7 @@ import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.imageMovieUrl
 
 @Composable
-fun ImageLazyRow(movieAndSeriesImagePoster:List<MovieAndSeriesImagePoster> ){
+fun ImageLazyRow(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>) {
 
     LazyRow(
         modifier = Modifier
@@ -45,7 +47,17 @@ fun ImageLazyRow(movieAndSeriesImagePoster:List<MovieAndSeriesImagePoster> ){
                         modifier = Modifier.fillMaxSize(),
                         model = imageMovieUrl(movieAndSeriesImagePoster[item].filePath),
                         contentDescription = null,
-                        loading = { CircularProgressIndicator() },
+                        loading = {
+                            Column(
+                                modifier = Modifier
+                                    .width(30.dp)
+                                    .height(30.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        },
                         contentScale = ContentScale.Crop,
                     )
                 }
