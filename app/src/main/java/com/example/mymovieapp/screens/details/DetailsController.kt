@@ -10,34 +10,34 @@ import kotlinx.coroutines.launch
 class DetailsController(
     private val model: DetailsModel
 ) {
-    val scope = CoroutineScope(Dispatchers.Default)
+    private val scope = CoroutineScope(Dispatchers.Default)
 
-    suspend fun getMovieDetails(id: Int, callback: (MovieAndSeriesDetails?) -> Unit) {
+    private suspend fun getMovieDetails(id: Int, callback: (MovieAndSeriesDetails?) -> Unit) {
         val movieDetails = model.getMovieDetails(id)
         callback.invoke(movieDetails)
     }
 
-    suspend fun getMovieCredits(id: Int, callback: (List<MovieCast>) -> Unit) {
+    private suspend fun getMovieCredits(id: Int, callback: (List<MovieCast>) -> Unit) {
         val movieCredits = model.getMovieCredits(id)
         callback.invoke(movieCredits)
     }
 
-    suspend fun getMovieImagesPoster(id: Int, callback: (List<MovieAndSeriesImagePoster>) -> Unit) {
+    private suspend fun getMovieImagesPoster(id: Int, callback: (List<MovieAndSeriesImagePoster>) -> Unit) {
         val moviePosterImages = model.getMovieImagesPoster(id)
         callback.invoke(moviePosterImages)
     }
 
-    suspend fun getSeriesDetails(id: Int, callback: (MovieAndSeriesDetails?) -> Unit) {
+    private suspend fun getSeriesDetails(id: Int, callback: (MovieAndSeriesDetails?) -> Unit) {
         val seriesDetails = model.getSeriesDetails(id)
         callback.invoke(seriesDetails)
     }
 
-    suspend fun getSeriesCredits(id: Int, callback: (List<MovieCast>) -> Unit) {
+    private suspend fun getSeriesCredits(id: Int, callback: (List<MovieCast>) -> Unit) {
         val seriesCredits = model.getSeriesCredits(id)
         callback.invoke(seriesCredits)
     }
 
-    suspend fun getSeriesImagesPoster(
+    private suspend fun getSeriesImagesPoster(
         id: Int, callback: (List<MovieAndSeriesImagePoster>) -> Unit
     ) {
         val seriesPosterImages = model.getSeriesImagesPoster(id)
