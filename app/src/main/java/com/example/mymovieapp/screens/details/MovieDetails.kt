@@ -43,9 +43,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import com.example.mymovieapp.R
 import com.example.mymovieapp.common.BodyTemplate
@@ -63,17 +63,17 @@ import com.example.mymovieapp.ui.theme.colorOrange
 import com.example.mymovieapp.ui.theme.colorWhite
 import com.example.mymovieapp.ui.theme.containerColor
 
+typealias CallbackNavController =  ()->Unit
 @Composable
-fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
+fun MovieDetails( id: Int?, type: String?, callbackNavController: CallbackNavController) {
+
 
     val detailsController = DetailsController(
         DetailsModel()
     )
-
     var movieAndSeriesDetails: MovieAndSeriesDetails? by remember {
         mutableStateOf(null)
     }
-
     var movieAndSeriesCredits by remember {
         mutableStateOf(emptyList<MovieCast>())
     }
@@ -82,6 +82,7 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
     }
 
     LaunchedEffect(Unit) {
+
         detailsController.validationMovieAndSeriesDetails(id, type) {
             movieAndSeriesDetails = it
         }
@@ -99,18 +100,17 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
             .fillMaxSize()
             .background(color = containerColor),
     ) {
-
-        if (movieAndSeriesDetails != null) {
+        if (movieAndSeriesDetails != null ) {
             BodyTemplate(
                 container = containerColor,
                 topBar = { },
                 bottomBar = { },
                 body = {
                     Details(
-                        navController,
                         movieAndSeriesCredits,
                         movieAndSeriesImagePoster,
-                        movieAndSeriesDetails!!
+                        movieAndSeriesDetails!!,
+                        callbackNavController
                     )
                 }
             )
@@ -120,10 +120,10 @@ fun MovieDetails(navController: NavHostController, id: Int?, type: String?) {
 
 @Composable
 fun Details(
-    navController: NavHostController,
     movieCredits: List<MovieCast>,
     movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
-    movieAndSeriesDetails: MovieAndSeriesDetails
+    movieAndSeriesDetails: MovieAndSeriesDetails,
+    callbackNavController: ()->Unit
 ) {
     val storyLine = movieAndSeriesDetails._overview
     Box(
@@ -140,7 +140,7 @@ fun Details(
             TopAppBarTemplate(
                 title = movieAndSeriesDetails._title,
                 secondIcon = true,
-                navController
+                callbackNavController
             )
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -451,5 +451,9 @@ fun ShowImageGallery(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>)
     }
 }
 
-
+@Composable
+@Preview
+fun MovieDetailsPreview(){
+    MovieDetails(id =  312, type = "movie", {})
+}
 

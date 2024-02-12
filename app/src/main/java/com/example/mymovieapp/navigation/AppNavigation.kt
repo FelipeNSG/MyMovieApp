@@ -1,6 +1,7 @@
 package com.example.mymovieapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,8 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mymovieapp.screens.details.MovieDetails
 import com.example.mymovieapp.screens.home.MediaScreen
-
-
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -28,7 +27,9 @@ fun AppNavigation() {
                 }
             )
         ) {
-            MovieDetails(navController = navController, it.arguments?.getInt("id"), it.arguments?.getString("type") )
+            MovieDetails(it.arguments?.getInt("id"), it.arguments?.getString("type")){
+                navController.popBackStack()
+            }
         }
     }
 }

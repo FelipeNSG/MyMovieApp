@@ -18,15 +18,18 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.mymovieapp.R
+import com.example.mymovieapp.screens.details.CallbackNavController
 import com.example.mymovieapp.ui.theme.colorWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHostController ) {
+fun TopAppBarTemplate(
+    title: String?,
+    secondIcon: Boolean,
+    callbackNavController: CallbackNavController
+) {
     Row {
-
         CenterAlignedTopAppBar(
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp),
@@ -35,14 +38,16 @@ fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHos
                 if (title.isNullOrEmpty()) {
                     Text(text = "")
                 } else {
-                    if (title.length > 16){
-                        Text(text = title.take(16).trimEnd().plus("..."),
+                    if (title.length > 16) {
+                        Text(
+                            text = title.take(16).trimEnd().plus("..."),
                             color = Color.White,
                             textAlign = TextAlign.Center,
                             fontFamily = FontFamily(Font(R.font.montserrat))
                         )
                     } else {
-                        Text(text = title,
+                        Text(
+                            text = title,
                             color = Color.White,
                             textAlign = TextAlign.Center,
                             fontFamily = FontFamily(Font(R.font.montserrat))
@@ -52,7 +57,7 @@ fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHos
             },
             colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { callbackNavController.invoke() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Icon",
@@ -70,11 +75,9 @@ fun TopAppBarTemplate(title: String?, secondIcon: Boolean, navController: NavHos
                         )
                     }
                 } else {
-
+                    Unit
                 }
             }
         )
     }
-
-
 }
