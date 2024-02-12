@@ -25,7 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +44,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import com.example.mymovieapp.R
@@ -65,15 +67,11 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MediaScreen(navController: NavHostController) {
-
+fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel = viewModel()) {
+    
     val homeController = HomeController(
         HomeModel()
     )
-
-    var listMostPopular by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
 
     var listUpcoming by remember {
         mutableStateOf(emptyList<Movie>())
@@ -88,26 +86,9 @@ fun MediaScreen(navController: NavHostController) {
     var listMostPopularSeries by remember {
         mutableStateOf(emptyList<Series>())
     }
-    LaunchedEffect(Unit) {
 
+    val listMostPopular = homeViewModel.popularMovies.asFlow().collectAsState(initial = emptyList())
 
-        homeController.getUpcomingMovies{
-            listUpcoming = it
-        }
-        homeController.getPopularMovies {
-            listMostPopular = it
-        }
-        homeController.getPlayNowMovies {
-            listPlayNow = it
-        }
-        homeController.getTopRate{
-            listTopRate = it
-        }
-
-        homeController.getPopularSeries{
-            listMostPopularSeries = it
-        }
-    }
     Scaffold(
         containerColor = containerColor,
         topBar = {
@@ -123,7 +104,7 @@ fun MediaScreen(navController: NavHostController) {
             ContentBoxCarousel(movieListState = listUpcoming)
             Categories()
             ContentColumnMovieList(
-                movieList = listMostPopular,
+                movieList = listMostPopular.value,
                 title = stringResource(id = R.string.list_most_popular),
                 navController = navController
             )
