@@ -258,7 +258,7 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
             text = "${movieAndSeriesDetails._runtime} minutes",
             color = colorGray,
         )
-    } else if (movieAndSeriesDetails._type == "series") {
+    } else if (movieAndSeriesDetails._type == "series" && movieAndSeriesDetails._episodeRunTime.isNotEmpty()) {
         Text(
             text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
             color = colorGray,
