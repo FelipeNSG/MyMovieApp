@@ -252,17 +252,22 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
             .height(18.dp)
             .padding(end = 8.dp),
         imageVector = Icons.Default.Schedule,
-        contentDescription = "Duration",
+        contentDescription ="Duration",
         tint = colorGray
     )
-    if (movieAndSeriesDetails._type == "movie") {
+    if (movieAndSeriesDetails._type == "movie" && movieAndSeriesDetails._runtime != 0) {
         Text(
             text = "${movieAndSeriesDetails._runtime} minutes",
             color = colorGray,
         )
-    } else {
+    } else if (movieAndSeriesDetails._type == "series" && movieAndSeriesDetails._episodeRunTime.isNotEmpty()) {
         Text(
             text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
+            color = colorGray,
+        )
+    } else {
+        Text(
+            text = "Not available",
             color = colorGray,
         )
     }
