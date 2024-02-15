@@ -69,9 +69,6 @@ fun SeriesId.toSeriesDetails(): MovieAndSeriesDetails {
         genre = emptyList(),
         runtime = Int.MIN_VALUE,
         releaseDate = "Unknown",
-
-
-
     )
 }
 

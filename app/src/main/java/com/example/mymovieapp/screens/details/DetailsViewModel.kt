@@ -25,8 +25,11 @@ class DetailsViewModel(var id: Int, private val repository: MoviesRepository, va
         viewModelScope.launch {
             if (type == "movie") {
                 val movieDetails = repository.getMovieDetails(id)
-                val movieCredits = repository.getMovieCredits(id)
-                val movieAndSeriesImagePoster = repository.getMovieImagesPoster(id)
+                val movieCredits =
+                    repository.getMovieCredits(id).filter { it.profilePath != "defaultProfilePath" }
+                val movieAndSeriesImagePoster =
+                    repository.getMovieImagesPoster(id).filter { it.iso6391 == "en" }
+                        .shuffled()
                 if (movieDetails != null) {
                     _movieAndSeries.value = MovieDetailsState.Success(
                         movieDetails,
@@ -37,7 +40,10 @@ class DetailsViewModel(var id: Int, private val repository: MoviesRepository, va
             } else if (type == "series") {
                 val movieDetails = repository.getSeriesDetails(id)
                 val movieCredits = repository.getSeriesCredits(id)
-                val movieAndSeriesImagePoster = repository.getSeriesImagesPoster(id)
+                    .filter { it.profilePath != "defaultProfilePath" }
+                val movieAndSeriesImagePoster =
+                    repository.getSeriesImagesPoster(id).filter { it.iso6391 == "en" }
+                        .shuffled()
                 if (movieDetails != null) {
                     _movieAndSeries.value = MovieDetailsState.Success(
                         movieDetails,
@@ -52,6 +58,7 @@ class DetailsViewModel(var id: Int, private val repository: MoviesRepository, va
     sealed class MovieDetailsState {
         object Loading : MovieDetailsState() {
         }
+
         data class Success(
             val details: MovieAndSeriesDetails,
             val credits: List<MovieCast>,

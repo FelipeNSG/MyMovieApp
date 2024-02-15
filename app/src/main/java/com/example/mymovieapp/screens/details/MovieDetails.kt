@@ -84,9 +84,8 @@ fun MovieDetails(
                     bottomBar = { },
                     body = {
                         Details(
-                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).credits.filter { it.profilePath != "defaultProfilePath" },
-                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).imagePoster.filter { it.iso6391 == "en" }
-                                .shuffled(),
+                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).credits,
+                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).imagePoster,
                             (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).details,
                             callbackNavController
                         )
@@ -240,7 +239,7 @@ fun ShowIconToSeparateContent() {
             .padding(horizontal = 8.dp),
         painter = painterResource(id = R.drawable.separator),
         tint = colorGray,
-        contentDescription = "Icon to separated Content"
+        contentDescription = R.string.icon_to_separated_Content.toString()
     )
 }
 
@@ -251,7 +250,7 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
             .height(18.dp)
             .padding(end = 8.dp),
         imageVector = Icons.Default.Schedule,
-        contentDescription = "Duration",
+        contentDescription = R.string.duration.toString(),
         tint = colorGray
     )
     if (movieAndSeriesDetails._type == "movie" && movieAndSeriesDetails._runtime != 0) {
