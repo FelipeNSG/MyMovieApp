@@ -25,12 +25,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,8 +40,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import com.example.mymovieapp.R
@@ -53,7 +47,6 @@ import com.example.mymovieapp.common.BottomBar
 import com.example.mymovieapp.common.TopAppBarSearch
 import com.example.mymovieapp.movies.Movie
 import com.example.mymovieapp.movies.MovieAndSeries
-import com.example.mymovieapp.movies.Series
 import com.example.mymovieapp.movies.imageMovieUrl
 import com.example.mymovieapp.navigation.AppScreen
 import com.example.mymovieapp.ui.theme.containerColor
@@ -67,27 +60,13 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel = viewModel()) {
-    
-    val homeController = HomeController(
-        HomeModel()
-    )
+fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel ) {
 
-    var listUpcoming by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-
-    var listPlayNow by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    var listTopRate by remember {
-        mutableStateOf(emptyList<Movie>())
-    }
-    var listMostPopularSeries by remember {
-        mutableStateOf(emptyList<Series>())
-    }
-
-    val listMostPopular = homeViewModel.popularMovies.asFlow().collectAsState(initial = emptyList())
+    val listMostPopular = homeViewModel.popularMovies.observeAsState(initial = emptyList())
+    val listPlayNow = homeViewModel.listPlayNow.observeAsState(initial = emptyList())
+    val listUpcoming = homeViewModel.listUpcoming.observeAsState(initial = emptyList() )
+    val listTopRate = homeViewModel.listTopRate.observeAsState(initial = emptyList())
+    val listMostPopularSeries = homeViewModel.listMostPopularSeries.observeAsState(initial = emptyList())
 
     Scaffold(
         containerColor = containerColor,
@@ -101,7 +80,7 @@ fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel =
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            ContentBoxCarousel(movieListState = listUpcoming)
+            ContentBoxCarousel(movieListState = listUpcoming.value)
             Categories()
             ContentColumnMovieList(
                 movieList = listMostPopular.value,
@@ -109,17 +88,17 @@ fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel =
                 navController = navController
             )
             ContentColumnMovieList(
-                movieList = listPlayNow,
+                movieList = listPlayNow.value,
                 title = stringResource(id = R.string.list_play_now),
                 navController = navController
             )
             ContentColumnMovieList(
-                movieList = listTopRate,
+                movieList = listTopRate.value,
                 title = stringResource(id = R.string.list_top_rate),
                 navController = navController
             )
             ContentColumnMovieList(
-                movieList = listMostPopularSeries,
+                movieList = listMostPopularSeries.value,
                 title = stringResource(id = R.string.list_most_popular_series),
                 navController = navController
             )
@@ -279,37 +258,41 @@ fun ListMovies(
             .padding(start = 8.dp),
     ) {
         items(movieAndSeries.size) { item ->
-            Card(
-                modifier = Modifier
-                    .width(135.dp)
-                    .height(231.dp)
-                    .padding(8.dp, 20.dp)
-                    .clickable {
-                        navController.navigate(route = AppScreen.MovieDetails.route + "/${movieAndSeries[item]._id}/${movieAndSeries[item]._type}")
-                    },
-            ) {
-                Box(
+
+            if (movieAndSeries[item]._url != "default_url") {
+
+                Card(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    SubcomposeAsyncImage(
-                        model = imageMovieUrl(movieAndSeries[item]._url),
-                        contentDescription = null,
-                        loading = {
-                            Column(
-                                modifier = Modifier
-                                    .width(30.dp)
-                                    .height(30.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                CircularProgressIndicator()
-                            }
+                        .width(135.dp)
+                        .height(231.dp)
+                        .padding(8.dp, 20.dp)
+                        .clickable {
+                            navController.navigate(route = AppScreen.MovieDetails.route + "/${movieAndSeries[item]._id}/${movieAndSeries[item]._type}")
                         },
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SubcomposeAsyncImage(
+                            model = imageMovieUrl(movieAndSeries[item]._url),
+                            contentDescription = null,
+                            loading = {
+                                Column(
+                                    modifier = Modifier
+                                        .width(30.dp)
+                                        .height(30.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            },
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
             }
         }

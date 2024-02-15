@@ -19,16 +19,13 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +40,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
@@ -63,57 +59,60 @@ import com.example.mymovieapp.ui.theme.colorOrange
 import com.example.mymovieapp.ui.theme.colorWhite
 import com.example.mymovieapp.ui.theme.containerColor
 
-typealias CallbackNavController =  ()->Unit
+typealias CallbackNavController = () -> Unit
+
 @Composable
-fun MovieDetails( id: Int?, type: String?, callbackNavController: CallbackNavController) {
-
-
-    val detailsController = DetailsController(
-        DetailsModel()
+fun MovieDetails(
+    detailsViewModel: DetailsViewModel,
+    callbackNavController: CallbackNavController,
+) {
+    val movieAndSeries = detailsViewModel.movieAndSeriesDetails.observeAsState(
+        initial = DetailsViewModel.MovieDetailsState.Loading
     )
-    var movieAndSeriesDetails: MovieAndSeriesDetails? by remember {
-        mutableStateOf(null)
-    }
-    var movieAndSeriesCredits by remember {
-        mutableStateOf(emptyList<MovieCast>())
-    }
-    var movieAndSeriesImagePoster by remember {
-        mutableStateOf(emptyList<MovieAndSeriesImagePoster>())
-    }
+    when (movieAndSeries.value) {
 
-    LaunchedEffect(Unit) {
+        is DetailsViewModel.MovieDetailsState.Success -> {
 
-        detailsController.validationMovieAndSeriesDetails(id, type) {
-            movieAndSeriesDetails = it
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = containerColor),
+            ) {
+                BodyTemplate(
+                    container = containerColor,
+                    topBar = { },
+                    bottomBar = { },
+                    body = {
+                        Details(
+                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).credits.filter { it.profilePath != "defaultProfilePath" },
+                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).imagePoster.filter { it.iso6391 == "en" }
+                                .shuffled(),
+                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).details,
+                            callbackNavController
+                        )
+                    }
+                )
+            }
         }
-        detailsController.validationMovieAndSeriesCredits(id, type) { credits ->
-            movieAndSeriesCredits = credits.filter { it.profilePath != "defaultProfilePath" }
 
-        }
-        detailsController.validationMovieAndSeriesImagePoster(id, type) { images ->
-            movieAndSeriesImagePoster = images.filter { it.iso6391 == "en" }.shuffled()
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = containerColor),
-    ) {
-        if (movieAndSeriesDetails != null ) {
-            BodyTemplate(
-                container = containerColor,
-                topBar = { },
-                bottomBar = { },
-                body = {
-                    Details(
-                        movieAndSeriesCredits,
-                        movieAndSeriesImagePoster,
-                        movieAndSeriesDetails!!,
-                        callbackNavController
-                    )
+        is DetailsViewModel.MovieDetailsState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = containerColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
                 }
-            )
+
+            }
         }
     }
 }
@@ -123,7 +122,7 @@ fun Details(
     movieCredits: List<MovieCast>,
     movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>,
     movieAndSeriesDetails: MovieAndSeriesDetails,
-    callbackNavController: ()->Unit
+    callbackNavController: () -> Unit
 ) {
     val storyLine = movieAndSeriesDetails._overview
     Box(
@@ -255,14 +254,19 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
         contentDescription = "Duration",
         tint = colorGray
     )
-    if (movieAndSeriesDetails._type == "movie") {
+    if (movieAndSeriesDetails._type == "movie" && movieAndSeriesDetails._runtime != 0) {
         Text(
             text = "${movieAndSeriesDetails._runtime} minutes",
             color = colorGray,
         )
-    } else {
+    } else if (movieAndSeriesDetails._type == "series") {
         Text(
             text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
+            color = colorGray,
+        )
+    } else {
+        Text(
+            text = "Not available",
             color = colorGray,
         )
     }
@@ -451,9 +455,4 @@ fun ShowImageGallery(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>)
     }
 }
 
-@Composable
-@Preview
-fun MovieDetailsPreview(){
-    MovieDetails(id =  312, type = "movie", {})
-}
 
