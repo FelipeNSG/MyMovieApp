@@ -76,7 +76,6 @@ fun MovieDetails(
     var movieOrSeriesDetails: MovieAndSeriesDetails? by remember {
         mutableStateOf(null)
     }
-
     val presenter: DetailsContract.Presenter = PresenterImpl()
     val detailsView: DetailsContract.View = object : DetailsContract.View {
         override fun displayMovieDetails(movieAndSeriesDetails: MovieAndSeriesDetails) {
