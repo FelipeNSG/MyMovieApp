@@ -6,13 +6,21 @@ class PresenterImpl : HomeContract.Presenter {
     private val interaction: HomeContract.Model = InteractionImpl()
 
     init {
+        getUpcomingMovies()
         getMostPopularMovies()
+        getPlayNowMovies()
+        getTopRateMovies()
+        getMostPopularSeries()
     }
+
     override fun setView(view: HomeContract.View) {
         this.view = view
     }
 
     override fun getUpcomingMovies() {
+        interaction.fetchUpcomingMovies {
+            view.displayUpcomingMovies(it)
+        }
 
     }
 
@@ -22,7 +30,21 @@ class PresenterImpl : HomeContract.Presenter {
         }
     }
 
-    override fun getTopRateMovies() {
+    override fun getPlayNowMovies() {
+        interaction.fetchPlayNowMovies {
+            view.displayPlayNowMovies(it)
+        }
+    }
 
+    override fun getTopRateMovies() {
+        interaction.fetchTopRateMovies {
+            view.displayTopRateMovies(it)
+        }
+    }
+
+    override fun getMostPopularSeries() {
+        interaction.fetchMostPopularSeries {
+        view.displayMostPopularSeries(it)
+        }
     }
 }

@@ -25,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,6 +48,7 @@ import com.example.mymovieapp.common.BottomBar
 import com.example.mymovieapp.common.TopAppBarSearch
 import com.example.mymovieapp.movies.Movie
 import com.example.mymovieapp.movies.MovieAndSeries
+import com.example.mymovieapp.movies.Series
 import com.example.mymovieapp.movies.imageMovieUrl
 import com.example.mymovieapp.navigation.AppScreen
 import com.example.mymovieapp.ui.theme.containerColor
@@ -62,37 +62,36 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel) {
-
+fun MediaScreen(navController: NavHostController) {
+    val listUpcoming = remember { mutableStateOf(emptyList<Movie>()) }
     val listMostPopular = remember { mutableStateOf(emptyList<Movie>()) }
-    val searchQuery = remember { mutableStateOf("") }
+    val listPlayNow = remember { mutableStateOf(emptyList<Movie>()) }
+    val listTopRate = remember { mutableStateOf(emptyList<Movie>()) }
+    val listMostPopularSeries = remember { mutableStateOf(emptyList<Series>()) }
 
-    val listPlayNow = homeViewModel.listPlayNow.observeAsState(initial = emptyList())
-    val listUpcoming = homeViewModel.listUpcoming.observeAsState(initial = emptyList() )
-    val listTopRate = homeViewModel.listTopRate.observeAsState(initial = emptyList())
-    val listMostPopularSeries = homeViewModel.listMostPopularSeries.observeAsState(initial = emptyList())
-
+    val presenter: HomeContract.Presenter = PresenterImpl()
     val homeView: HomeContract.View = object : HomeContract.View {
 
         override fun displayUpcomingMovies(movies: List<Movie>) {
-
+            listUpcoming.value = movies
         }
 
         override fun displayMostPopularMovies(movies: List<Movie>) {
             listMostPopular.value = movies
         }
 
+        override fun displayPlayNowMovies(movies: List<Movie>) {
+            listPlayNow.value = movies
+        }
+
         override fun displayTopRateMovies(movies: List<Movie>) {
-
+            listTopRate.value = movies
         }
 
-        override fun getSearchQuery(): String {
-            return searchQuery.value
+        override fun displayMostPopularSeries(series: List<Series>) {
+            listMostPopularSeries.value = series
         }
-
     }
-
-    val presenter: HomeContract.Presenter = PresenterImpl()
     presenter.setView(homeView)
 
     Scaffold(

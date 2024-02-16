@@ -10,15 +10,14 @@ import androidx.navigation.navArgument
 import com.example.mymovieapp.screens.details.DetailsViewModel
 import com.example.mymovieapp.screens.details.MovieDetails
 import com.example.mymovieapp.screens.details.MyViewModelFactory
-import com.example.mymovieapp.screens.home.HomeViewModel
 import com.example.mymovieapp.screens.home.MediaScreen
 
 @Composable
-fun AppNavigation(homeViewModel: HomeViewModel) {
+fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = AppScreen.Home.route) {
         composable(AppScreen.Home.route) {
-            MediaScreen(navController = navController, homeViewModel)
+            MediaScreen(navController = navController)
         }
         composable(
             AppScreen.MovieDetails.route + "/{id}/{type}",
@@ -36,7 +35,7 @@ fun AppNavigation(homeViewModel: HomeViewModel) {
 
             val detailsViewModel: DetailsViewModel =
                 viewModel(factory = MyViewModelFactory(id, type))
-            MovieDetails(detailsViewModel) {
+            MovieDetails(detailsViewModel,id,type) {
                 navController.popBackStack()
             }
         }

@@ -26,6 +26,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,6 +54,7 @@ import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import com.example.mymovieapp.movies.imageMovieUrl
+import com.example.mymovieapp.network.model.movieandseriescredit.MovieAndSeriesCredits
 import com.example.mymovieapp.ui.theme.colorBlue
 import com.example.mymovieapp.ui.theme.colorGray
 import com.example.mymovieapp.ui.theme.colorLightBlack
@@ -64,8 +67,31 @@ typealias CallbackNavController = () -> Unit
 @Composable
 fun MovieDetails(
     detailsViewModel: DetailsViewModel,
+    id: Int,
+    type: String,
     callbackNavController: CallbackNavController,
 ) {
+    val movieOrSeriesDetails = remember {
+       mutableStateOf("")
+    }
+
+    val presenter: DetailsContract.Presenter = PresenterImpl()
+    val detailsView: DetailsContract.View = object : DetailsContract.View {
+        override fun displayMovieDetails(movieAndSeriesDetails: MovieAndSeriesDetails) {
+
+        }
+
+        override fun displayMovieCredits(movieAndSeriesCredits: List<MovieAndSeriesCredits>) {
+
+        }
+
+        override fun displayImagesPoster(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>) {
+
+        }
+    }
+    presenter.setView(id, type, detailsView)
+
+
     val movieAndSeries = detailsViewModel.movieAndSeriesDetails.observeAsState(
         initial = DetailsViewModel.MovieDetailsState.Loading
     )
