@@ -26,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,13 +62,38 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel ) {
+fun MediaScreen(navController: NavHostController, homeViewModel: HomeViewModel) {
 
-    val listMostPopular = homeViewModel.popularMovies.observeAsState(initial = emptyList())
+    val listMostPopular = remember { mutableStateOf(emptyList<Movie>()) }
+    val searchQuery = remember { mutableStateOf("") }
+
     val listPlayNow = homeViewModel.listPlayNow.observeAsState(initial = emptyList())
     val listUpcoming = homeViewModel.listUpcoming.observeAsState(initial = emptyList() )
     val listTopRate = homeViewModel.listTopRate.observeAsState(initial = emptyList())
     val listMostPopularSeries = homeViewModel.listMostPopularSeries.observeAsState(initial = emptyList())
+
+    val homeView: HomeContract.View = object : HomeContract.View {
+
+        override fun displayUpcomingMovies(movies: List<Movie>) {
+
+        }
+
+        override fun displayMostPopularMovies(movies: List<Movie>) {
+            listMostPopular.value = movies
+        }
+
+        override fun displayTopRateMovies(movies: List<Movie>) {
+
+        }
+
+        override fun getSearchQuery(): String {
+            return searchQuery.value
+        }
+
+    }
+
+    val presenter: HomeContract.Presenter = PresenterImpl()
+    presenter.setView(homeView)
 
     Scaffold(
         containerColor = containerColor,
@@ -174,15 +201,15 @@ fun Carousel(sliderList: List<Movie>) {
                     model = imageMovieUrl(sliderList[page].backdropPath, width = "original"),
                     contentDescription = null,
                     loading = {
-                       /* Column(
-                            modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }*/
+                        /* Column(
+                             modifier = Modifier
+                                 .width(30.dp)
+                                 .height(30.dp),
+                             horizontalAlignment = Alignment.CenterHorizontally,
+                             verticalArrangement = Arrangement.Center
+                         ) {
+                             CircularProgressIndicator()
+                         }*/
                     },
                     contentScale = ContentScale.Crop,
                 )
