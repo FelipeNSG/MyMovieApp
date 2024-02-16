@@ -386,6 +386,7 @@ fun ShowTagLine(movieAndSeriesDetails: MovieAndSeriesDetails) {
 @Composable
 fun ShowStoryLine(storyLine: String) {
     if (storyLine.isNotEmpty()) {
+
         Text(
             text = "Story Line",
             style = TextStyle(
@@ -394,6 +395,7 @@ fun ShowStoryLine(storyLine: String) {
                 color = Color.White,
             )
         )
+
         Text(
             buildAnnotatedString {
                 withStyle(
@@ -419,8 +421,8 @@ fun ShowStoryLine(storyLine: String) {
                 }
             },
             maxLines = 4,
-            overflow = TextOverflow.Ellipsis
-        )
+            overflow = TextOverflow.Ellipsis,
+            )
     }
 }
 
