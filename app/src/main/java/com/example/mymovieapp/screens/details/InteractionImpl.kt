@@ -20,9 +20,11 @@ class InteractionImpl : DetailsContract.Model {
         scope.launch {
             if (type == "movie") {
                 val movieDetails = moviesRepository.getMovieDetails(id)
+                //TODO(AVOID TO USE !! OPERATOR IS NOT SAFE)
                 result.invoke(movieDetails!!)
             } else {
                 val seriesDetails = moviesRepository.getSeriesDetails(id)
+                //TODO(SAME AS ABOVE)
                 result.invoke(seriesDetails!!)
             }
         }

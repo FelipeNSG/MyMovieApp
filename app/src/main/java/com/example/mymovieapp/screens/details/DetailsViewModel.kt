@@ -11,6 +11,7 @@ import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import kotlinx.coroutines.launch
 
+//TODO("DELETE THIS CLASS")
 class DetailsViewModel(var id: Int, private val repository: MoviesRepository, var type: String) :
     ViewModel() {
     init {

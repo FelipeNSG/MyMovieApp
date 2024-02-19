@@ -70,6 +70,7 @@ fun MovieDetails(
     callbackNavController: CallbackNavController,
 ) {
     var movieOrSeriesDetails: MovieAndSeriesDetails? by remember {
+        //TODO("STATES SHOULD NOT BE NULL NEVER")
         mutableStateOf(null)
     }
 
@@ -103,6 +104,7 @@ fun MovieDetails(
                 .fillMaxSize()
                 .background(color = containerColor),
         ) {
+            //TODO("AVOID NULL ASSERTIONS")
             if (movieOrSeriesDetails != null) {
                 BodyTemplate(
                     container = containerColor,
@@ -129,6 +131,7 @@ fun Details(
     movieAndSeriesDetails: MovieAndSeriesDetails,
     callbackNavController: () -> Unit
 ) {
+    //TODO("REMOVE UNDERSCORE")
     val storyLine = movieAndSeriesDetails._overview
     Box(
         modifier = Modifier
@@ -142,6 +145,7 @@ fun Details(
                 .verticalScroll(rememberScrollState())
         ) {
             TopAppBarTemplate(
+                //TODO("SAME AS ABOVE")
                 title = movieAndSeriesDetails._title,
                 secondIcon = true,
                 callbackNavController
@@ -224,6 +228,7 @@ fun ShowCalendarIconAndReleaseYearOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         tint = colorGray,
         contentDescription = null
     )
+    //TODO("AVOID TO USE STRING LITERALS FOR ASSERTIONS")
     if (movieAndSeriesDetails._type == "movie") {
         Text(
             text = movieAndSeriesDetails._releaseDate.take(4),
@@ -259,17 +264,20 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
         contentDescription = R.string.duration.toString(),
         tint = colorGray
     )
+    //TODO("AVOID TO USE STRING LITERALS FOR ASSERTIONS")
     if (movieAndSeriesDetails._type == "movie" && movieAndSeriesDetails._runtime != 0) {
         Text(
             text = "${movieAndSeriesDetails._runtime} minutes",
             color = colorGray,
         )
+        //TODO("REMOVE UNDERSCORE")
     } else if (movieAndSeriesDetails._type == "series" && movieAndSeriesDetails._episodeRunTime.isNotEmpty()) {
         Text(
             text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
             color = colorGray,
         )
     } else {
+        //TODO("AVOID TO USE HARDCODE VALUES")
         Text(
             text = "Not available",
             color = colorGray,
@@ -368,6 +376,7 @@ fun ShowButtonPlayDownloadAndShare() {
 
 @Composable
 fun ShowTagLine(movieAndSeriesDetails: MovieAndSeriesDetails) {
+    //TODO("THIS LOGIC COULD BE IN OTHER PLACE, LIKE THE MODEL IT BELONGS?")
     if (movieAndSeriesDetails._tagline != "") {
         Text(
             text = "Tag Line",

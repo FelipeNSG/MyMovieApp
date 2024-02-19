@@ -4,6 +4,7 @@ import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 
+//TODO("CURLY BRACES ARE NOT NEEDED")
 interface DetailsContract {
 
     interface View {
