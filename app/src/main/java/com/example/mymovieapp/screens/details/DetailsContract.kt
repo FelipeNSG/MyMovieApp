@@ -1,8 +1,8 @@
 package com.example.mymovieapp.screens.details
 
 import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
+import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
-import com.example.mymovieapp.network.model.movieandseriescredit.MovieAndSeriesCredits
 
 interface DetailsContract {
 
@@ -11,7 +11,7 @@ interface DetailsContract {
 
         }
 
-        fun displayMovieCredits(movieAndSeriesCredits: List<MovieAndSeriesCredits>) {
+        fun displayMovieCredits(movieAndSeriesCredits: List<MovieCast>) {
 
         }
 
@@ -22,13 +22,7 @@ interface DetailsContract {
 
     interface Presenter {
 
-        fun setView(id:Int, type:String, view : DetailsContract.View)
-        fun setId(id:Int){
-
-        }
-        fun setType(type: String){
-
-        }
+        fun setView(id: Int, type: String, view: DetailsContract.View)
 
         fun getMovieDetails() {
 
@@ -46,15 +40,27 @@ interface DetailsContract {
 
     interface Model {
 
-        fun fetchMovieAndSeriesDetails(id:Int, type:String, result: (MovieAndSeriesDetails) -> Unit) {
+        fun fetchMovieAndSeriesDetails(
+            id: Int,
+            type: String,
+            result: (MovieAndSeriesDetails) -> Unit
+        ) {
 
         }
 
-        fun fetchMovieCredits(id:Int,type:String,result: List<MovieAndSeriesCredits>) {
+        fun fetchMovieCredits(
+            id: Int,
+            type: String,
+            result: (List<MovieCast>) -> Unit
+        ) {
 
         }
 
-        fun fetchImagesPoster(id:Int,type:String,result: List<MovieAndSeriesImagePoster>) {
+        fun fetchImagesPoster(
+            id: Int,
+            type: String,
+            result: (List<MovieAndSeriesImagePoster>) -> Unit
+        ) {
 
         }
 

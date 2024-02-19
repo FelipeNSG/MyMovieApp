@@ -19,14 +19,12 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -56,7 +54,6 @@ import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import com.example.mymovieapp.movies.imageMovieUrl
-import com.example.mymovieapp.network.model.movieandseriescredit.MovieAndSeriesCredits
 import com.example.mymovieapp.ui.theme.colorBlue
 import com.example.mymovieapp.ui.theme.colorGray
 import com.example.mymovieapp.ui.theme.colorLightBlack
@@ -68,7 +65,6 @@ typealias CallbackNavController = () -> Unit
 
 @Composable
 fun MovieDetails(
-    detailsViewModel: DetailsViewModel,
     id: Int,
     type: String,
     callbackNavController: CallbackNavController,
@@ -76,44 +72,47 @@ fun MovieDetails(
     var movieOrSeriesDetails: MovieAndSeriesDetails? by remember {
         mutableStateOf(null)
     }
+
+    var movieOrSeriesCredits: List<MovieCast> by remember {
+        mutableStateOf(emptyList())
+    }
+    var movieOrSeriesImagesPoster: List<MovieAndSeriesImagePoster> by remember {
+        mutableStateOf(emptyList())
+    }
+
+
     val presenter: DetailsContract.Presenter = PresenterImpl()
     val detailsView: DetailsContract.View = object : DetailsContract.View {
         override fun displayMovieDetails(movieAndSeriesDetails: MovieAndSeriesDetails) {
             movieOrSeriesDetails = movieAndSeriesDetails
         }
 
-        override fun displayMovieCredits(movieAndSeriesCredits: List<MovieAndSeriesCredits>) {
-
+        override fun displayMovieCredits(movieAndSeriesCredits: List<MovieCast>) {
+            movieOrSeriesCredits = movieAndSeriesCredits
         }
 
         override fun displayImagesPoster(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>) {
-
+            movieOrSeriesImagesPoster = movieAndSeriesImagePoster
         }
     }
     presenter.setView(id, type, detailsView)
 
 
-    val movieAndSeries = detailsViewModel.movieAndSeriesDetails.observeAsState(
-        initial = DetailsViewModel.MovieDetailsState.Loading
-    )
-    when (movieAndSeries.value) {
-
-        is DetailsViewModel.MovieDetailsState.Success -> {
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = containerColor),
-            ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = containerColor),
+        ) {
+            if (movieOrSeriesDetails != null) {
                 BodyTemplate(
                     container = containerColor,
                     topBar = { },
                     bottomBar = { },
                     body = {
                         Details(
-                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).credits,
-                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).imagePoster,
-                            (movieAndSeries.value as DetailsViewModel.MovieDetailsState.Success).details,
+                            movieOrSeriesCredits,
+                            movieOrSeriesImagesPoster,
+                            movieOrSeriesDetails!!,
                             callbackNavController
                         )
                     }
@@ -121,26 +120,6 @@ fun MovieDetails(
             }
         }
 
-        is DetailsViewModel.MovieDetailsState.Loading -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = containerColor),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator()
-                }
-
-            }
-        }
-    }
 }
 
 @Composable

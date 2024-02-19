@@ -8,33 +8,34 @@ class PresenterImpl : DetailsContract.Presenter {
 
     private val interaction: DetailsContract.Model = InteractionImpl()
 
-    init {
+
+    override fun setView(id: Int, type: String, view: DetailsContract.View) {
+        this.view = view
+        this.id = id
+        this.type = type
+
         getMovieDetails()
         getMovieCredits()
         getImagesPoster()
     }
 
-    override fun setView(id:Int, type:String, view: DetailsContract.View) {
-        this.view = view
-        this.id = id
-        this.type = type
-    }
-
 
     override fun getMovieDetails() {
-            when (id != 0 && type != ""){
-                true -> interaction.fetchMovieAndSeriesDetails(id, type){
-                    view.displayMovieDetails(it)
-                }
-                false -> TODO()
-            }
+
+        interaction.fetchMovieAndSeriesDetails(id, type) {
+            view.displayMovieDetails(it)
+        }
     }
 
     override fun getMovieCredits() {
-
+        interaction.fetchMovieCredits(id, type) {
+            view.displayMovieCredits(it)
+        }
     }
 
     override fun getImagesPoster() {
-
+        interaction.fetchImagesPoster(id, type) {
+            view.displayImagesPoster(it)
+        }
     }
 }
