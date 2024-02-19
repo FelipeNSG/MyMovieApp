@@ -154,6 +154,7 @@ fun ContentBoxCarousel(movieListState: List<Movie>) {
             .fillMaxWidth()
             .height(290.dp)
     ) {
+        // this is not view logic, it should be in other class, for example interaction
         if (movieListState.isNotEmpty()) Carousel(sliderList = movieListState.take(5))
     }
 }
@@ -284,7 +285,7 @@ fun ListMovies(
             .padding(start = 8.dp),
     ) {
         items(movieAndSeries.size) { item ->
-
+            //remove under score and also default value
             if (movieAndSeries[item]._url != "default_url") {
 
                 Card(
@@ -293,6 +294,7 @@ fun ListMovies(
                         .height(231.dp)
                         .padding(8.dp, 20.dp)
                         .clickable {
+                            //same as above remove underscore from all properties
                             navController.navigate(route = AppScreen.MovieDetails.route + "/${movieAndSeries[item]._id}/${movieAndSeries[item]._type}")
                         },
                 ) {
