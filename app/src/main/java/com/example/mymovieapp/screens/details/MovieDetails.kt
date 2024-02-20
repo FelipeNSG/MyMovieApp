@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -71,7 +72,6 @@ fun MovieDetails(
     callbackNavController: CallbackNavController,
 ) {
     var movieOrSeriesDetails: Stated by remember {
-        //TODO("STATES SHOULD NOT BE NULL NEVER")
         mutableStateOf(Stated.Loading)
     }
 
@@ -144,7 +144,6 @@ fun Details(
     movieAndSeriesDetails: MovieAndSeriesDetails,
     callbackNavController: () -> Unit
 ) {
-    //TODO("REMOVE UNDERSCORE")
     val storyLine = movieAndSeriesDetails.overview
     Box(
         modifier = Modifier
@@ -158,7 +157,6 @@ fun Details(
                 .verticalScroll(rememberScrollState())
         ) {
             TopAppBarTemplate(
-                //TODO("SAME AS ABOVE")
                 title = movieAndSeriesDetails.title,
                 secondIcon = true,
                 callbackNavController
@@ -241,8 +239,7 @@ fun ShowCalendarIconAndReleaseYearOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         tint = colorGray,
         contentDescription = null
     )
-    //TODO("AVOID TO USE STRING LITERALS FOR ASSERTIONS")
-    if (movieAndSeriesDetails.type == "movie") {
+    if (movieAndSeriesDetails.isMovie()) {
         Text(
             text = movieAndSeriesDetails.releaseDate.take(4),
             color = colorGray,
@@ -277,14 +274,12 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
         contentDescription = R.string.duration.toString(),
         tint = colorGray
     )
-    //TODO("AVOID TO USE STRING LITERALS FOR ASSERTIONS")
-    if (movieAndSeriesDetails.type == "movie" && movieAndSeriesDetails.runtime != 0) {
+    if (movieAndSeriesDetails.isMovie() && movieAndSeriesDetails.runtime != 0) {
         Text(
             text = "${movieAndSeriesDetails.runtime} minutes",
             color = colorGray,
         )
-        //TODO("REMOVE UNDERSCORE")
-    } else if (movieAndSeriesDetails.type == "series" && movieAndSeriesDetails.episodeRunTime.isNotEmpty()) {
+    } else if (movieAndSeriesDetails.isSeries() && movieAndSeriesDetails.episodeRunTime.isNotEmpty()) {
         Text(
             text = "${movieAndSeriesDetails.episodeRunTime[0]} minutes",
             color = colorGray,
@@ -292,7 +287,7 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
     } else {
         //TODO("AVOID TO USE HARDCODE VALUES")
         Text(
-            text = "Not Available",
+            text = stringResource(id = R.string.not_available),
             color = colorGray,
         )
     }
@@ -306,13 +301,13 @@ fun ShowDescriptionIconAndCategoryOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         tint = colorGray,
         contentDescription = "Icon Category"
     )
-    if (movieAndSeriesDetails.type == "movie" && movieAndSeriesDetails.genre.isNotEmpty()) {
+    if (movieAndSeriesDetails.type == "Movie" && (movieAndSeriesDetails.genre.isNotEmpty())) {
         Text(
             text = movieAndSeriesDetails.genre[0].name,
             color = colorGray,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
-    } else if (movieAndSeriesDetails.type == "series" && movieAndSeriesDetails.genre.isNotEmpty()){
+    } else if (movieAndSeriesDetails.type == "Series" && (movieAndSeriesDetails.genres.isNotEmpty())){
         Text(
             text = movieAndSeriesDetails.genres[0].name,
             color = colorGray,
@@ -320,7 +315,7 @@ fun ShowDescriptionIconAndCategoryOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         )
     }else {
         Text(
-            text = "Not Available",
+            text = stringResource(id = R.string.not_available),
             color = colorGray,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
@@ -396,7 +391,7 @@ fun ShowButtonPlayDownloadAndShare() {
 @Composable
 fun ShowTagLine(movieAndSeriesDetails: MovieAndSeriesDetails) {
     //TODO("THIS LOGIC COULD BE IN OTHER PLACE, LIKE THE MODEL IT BELONGS?")
-    if (movieAndSeriesDetails.tagline != "") {
+    if (movieAndSeriesDetails.tagline.isNotEmpty()) {
         Text(
             text = "Tag Line",
             style = TextStyle(

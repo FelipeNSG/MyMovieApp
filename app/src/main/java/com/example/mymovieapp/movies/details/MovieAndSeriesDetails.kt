@@ -20,5 +20,12 @@ open class MovieAndSeriesDetails(
     open val numberOfSeason: Int,
     open val firstAirDate: String,
     open val episodeRunTime: List<Int>
-)
+) {
+    fun isMovie(): Boolean {
+        return type == "movie"
+    }
+    fun isSeries(): Boolean {
+        return type == "series"
+    }
+}
 
