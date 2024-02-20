@@ -2,13 +2,12 @@ package com.example.mymovieapp.screens.details
 
 import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
-import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 
 //TODO("CURLY BRACES ARE NOT NEEDED")
 interface DetailsContract {
 
     interface View {
-        fun displayMovieDetails(movieAndSeriesDetails: MovieAndSeriesDetails) {
+        fun displayMovieDetails(statedDetailsDetails: Stated) {
 
         }
 
@@ -44,7 +43,7 @@ interface DetailsContract {
         fun fetchMovieAndSeriesDetails(
             id: Int,
             type: String,
-            result: (MovieAndSeriesDetails) -> Unit
+            result: (Stated) -> Unit
         ) {
 
         }
@@ -66,5 +65,4 @@ interface DetailsContract {
         }
 
     }
-
 }

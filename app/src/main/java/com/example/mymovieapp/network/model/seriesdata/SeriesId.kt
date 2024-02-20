@@ -5,25 +5,25 @@ import com.google.gson.annotations.SerializedName
 
 data class SeriesId(
     @SerializedName("number_of_seasons")
-    val numberOfSeasons: Int?,
+    val numberOfSeasons: Int? = null,
     @SerializedName("backdrop_path")
-    val backdropPath: String?,
+    val backdropPath: String? = null,
     @SerializedName("genres")
-    val genres: List<Genres>?,
+    val genres: List<Genres>? = null,
     @SerializedName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerializedName("first_air_date")
-    val firstAirDate: String?,
+    val firstAirDate: String? = null,
     @SerializedName("name")
-    val name: String?,
+    val name: String? = null,
     @SerializedName("overview")
-    val overview: String?,
+    val overview: String? = null,
     @SerializedName("poster_path")
-    val posterPath: String?,
+    val posterPath: String? = null,
     @SerializedName("tagline")
-    val tagline: String?,
+    val tagline: String? = null,
     @SerializedName("vote_average")
-    val voteAverage: Double?,
+    val voteAverage: Double? = null,
     @SerializedName("episode_run_time")
-    val episodeRunTime: List<Int>?
+    val episodeRunTime: List<Int>? = null
 )

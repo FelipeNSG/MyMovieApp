@@ -13,7 +13,7 @@ class InteractionImpl : HomeContract.Model {
     private val scope = CoroutineScope(Dispatchers.IO)
     override fun fetchUpcomingMovies(result: (List<Movie>) -> Unit) {
         scope.launch {
-            val movies = moviesRepository.getUpcomingMovies()
+            val movies = moviesRepository.getUpcomingMovies().take(5)
             result.invoke(movies)
         }
     }

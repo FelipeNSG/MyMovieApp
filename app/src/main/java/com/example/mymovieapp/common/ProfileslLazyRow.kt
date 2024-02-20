@@ -17,8 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import com.example.mymovieapp.movies.imageMovieUrl
 import com.example.mymovieapp.movies.MovieCast
+import com.example.mymovieapp.movies.imageMovieUrl
 import com.example.mymovieapp.ui.theme.colorWhite
 
 @Composable
@@ -31,28 +31,31 @@ fun Profiles(movieCredits: List<MovieCast>) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Card(
-                    modifier = Modifier
-                        .size(90.dp),
-                    shape = CircleShape
 
-                ) {
-                    SubcomposeAsyncImage(
-                        model = imageMovieUrl(movieCredits[item].profilePath),
-                        contentDescription = null,
-                        loading = { CircularProgressIndicator() },
+                    Card(
                         modifier = Modifier
-                            .clip(CircleShape)
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop,
-                    )
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                ) {
-                    Text(text =  movieCredits[item].originalName, color = colorWhite)
-                    Text(text = movieCredits[item].character, color = colorWhite)
-                }
+                            .size(90.dp),
+                        shape = CircleShape
+
+                    ) {
+                        SubcomposeAsyncImage(
+                            model = imageMovieUrl(movieCredits[item].profilePath),
+                            contentDescription = "Description",
+                            loading = { CircularProgressIndicator() },
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    ) {
+                        Text(text = movieCredits[item].originalName, color = colorWhite)
+                        Text(text = movieCredits[item].character, color = colorWhite)
+                    }
+
+
             }
         }
     }

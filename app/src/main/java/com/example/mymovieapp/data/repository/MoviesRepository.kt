@@ -86,6 +86,7 @@ object MoviesRepository {
         return try {
             val result = MovieClient.createMoviesService().getMovieDetails(id)
             result.toMovieDetails()
+
         } catch (ex: HttpException) {
             ex.printStackTrace()
             return null

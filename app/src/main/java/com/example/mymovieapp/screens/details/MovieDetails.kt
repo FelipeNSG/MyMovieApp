@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,9 +70,9 @@ fun MovieDetails(
     type: String,
     callbackNavController: CallbackNavController,
 ) {
-    var movieOrSeriesDetails: MovieAndSeriesDetails? by remember {
+    var movieOrSeriesDetails: Stated by remember {
         //TODO("STATES SHOULD NOT BE NULL NEVER")
-        mutableStateOf(null)
+        mutableStateOf(Stated.Loading)
     }
 
     var movieOrSeriesCredits: List<MovieCast> by remember {
@@ -84,8 +85,8 @@ fun MovieDetails(
 
     val presenter: DetailsContract.Presenter = PresenterImpl()
     val detailsView: DetailsContract.View = object : DetailsContract.View {
-        override fun displayMovieDetails(movieAndSeriesDetails: MovieAndSeriesDetails) {
-            movieOrSeriesDetails = movieAndSeriesDetails
+        override fun displayMovieDetails(stateDetails: Stated) {
+            movieOrSeriesDetails = stateDetails
         }
 
         override fun displayMovieCredits(movieAndSeriesCredits: List<MovieCast>) {
@@ -96,31 +97,43 @@ fun MovieDetails(
             movieOrSeriesImagesPoster = movieAndSeriesImagePoster
         }
     }
-    presenter.setView(id, type, detailsView)
+    LaunchedEffect(Unit){
+        presenter.setView(id, type, detailsView)
+    }
 
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = containerColor),
-        ) {
-            //TODO("AVOID NULL ASSERTIONS")
-            if (movieOrSeriesDetails != null) {
-                BodyTemplate(
-                    container = containerColor,
-                    topBar = { },
-                    bottomBar = { },
-                    body = {
-                        Details(
-                            movieOrSeriesCredits,
-                            movieOrSeriesImagesPoster,
-                            movieOrSeriesDetails!!,
-                            callbackNavController
-                        )
-                    }
+        when (movieOrSeriesDetails){
+            Stated.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = containerColor),
                 )
+
+            }
+            is Stated.Success -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = containerColor),
+                ){
+
+                    BodyTemplate(
+                        container = containerColor,
+                        topBar = { },
+                        bottomBar = { },
+                        body = {
+                            Details(
+                                movieOrSeriesCredits,
+                                movieOrSeriesImagesPoster,
+                                (movieOrSeriesDetails as Stated.Success).details,
+                                callbackNavController
+                            )
+                        }
+                    )
+                }
             }
         }
+
 
 }
 
@@ -132,7 +145,7 @@ fun Details(
     callbackNavController: () -> Unit
 ) {
     //TODO("REMOVE UNDERSCORE")
-    val storyLine = movieAndSeriesDetails._overview
+    val storyLine = movieAndSeriesDetails.overview
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -146,7 +159,7 @@ fun Details(
         ) {
             TopAppBarTemplate(
                 //TODO("SAME AS ABOVE")
-                title = movieAndSeriesDetails._title,
+                title = movieAndSeriesDetails.title,
                 secondIcon = true,
                 callbackNavController
             )
@@ -199,7 +212,7 @@ fun ImageFromTheMovieOrSeriesForScreenBackground(movieAndSeriesDetails: MovieAnd
         modifier = Modifier
             .fillMaxWidth()
             .height(550.dp),
-        model = imageMovieUrl(movieAndSeriesDetails._posterPath),
+        model = imageMovieUrl(movieAndSeriesDetails.posterPath),
         contentDescription = null,
         contentScale = ContentScale.Crop,
         alpha = 0.15f
@@ -212,7 +225,7 @@ fun MainImageOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
         modifier = Modifier
             .width(260.dp)
             .height(360.dp),
-        model = imageMovieUrl(movieAndSeriesDetails._posterPath),
+        model = imageMovieUrl(movieAndSeriesDetails.posterPath),
         contentDescription = null,
         contentScale = ContentScale.Crop,
     )
@@ -229,14 +242,14 @@ fun ShowCalendarIconAndReleaseYearOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         contentDescription = null
     )
     //TODO("AVOID TO USE STRING LITERALS FOR ASSERTIONS")
-    if (movieAndSeriesDetails._type == "movie") {
+    if (movieAndSeriesDetails.type == "movie") {
         Text(
-            text = movieAndSeriesDetails._releaseDate.take(4),
+            text = movieAndSeriesDetails.releaseDate.take(4),
             color = colorGray,
         )
     } else {
         Text(
-            text = movieAndSeriesDetails._firstAirDate.take(4),
+            text = movieAndSeriesDetails.firstAirDate.take(4),
             color = colorGray,
         )
     }
@@ -265,21 +278,21 @@ fun ShowTimeIconAndDurationOfTheMovieOrSeries(movieAndSeriesDetails: MovieAndSer
         tint = colorGray
     )
     //TODO("AVOID TO USE STRING LITERALS FOR ASSERTIONS")
-    if (movieAndSeriesDetails._type == "movie" && movieAndSeriesDetails._runtime != 0) {
+    if (movieAndSeriesDetails.type == "movie" && movieAndSeriesDetails.runtime != 0) {
         Text(
-            text = "${movieAndSeriesDetails._runtime} minutes",
+            text = "${movieAndSeriesDetails.runtime} minutes",
             color = colorGray,
         )
         //TODO("REMOVE UNDERSCORE")
-    } else if (movieAndSeriesDetails._type == "series" && movieAndSeriesDetails._episodeRunTime.isNotEmpty()) {
+    } else if (movieAndSeriesDetails.type == "series" && movieAndSeriesDetails.episodeRunTime.isNotEmpty()) {
         Text(
-            text = "${movieAndSeriesDetails._episodeRunTime[0]} minutes",
+            text = "${movieAndSeriesDetails.episodeRunTime[0]} minutes",
             color = colorGray,
         )
     } else {
         //TODO("AVOID TO USE HARDCODE VALUES")
         Text(
-            text = "Not available",
+            text = "Not Available",
             color = colorGray,
         )
     }
@@ -293,15 +306,21 @@ fun ShowDescriptionIconAndCategoryOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         tint = colorGray,
         contentDescription = "Icon Category"
     )
-    if (movieAndSeriesDetails._type == "movie") {
+    if (movieAndSeriesDetails.type == "movie" && movieAndSeriesDetails.genre.isNotEmpty()) {
         Text(
-            text = movieAndSeriesDetails._genre[0].name,
+            text = movieAndSeriesDetails.genre[0].name,
             color = colorGray,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
-    } else {
+    } else if (movieAndSeriesDetails.type == "series" && movieAndSeriesDetails.genre.isNotEmpty()){
         Text(
-            text = movieAndSeriesDetails._genres[0].name,
+            text = movieAndSeriesDetails.genres[0].name,
+            color = colorGray,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+    }else {
+        Text(
+            text = "Not Available",
             color = colorGray,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
@@ -316,7 +335,7 @@ fun ShowRatingOfMovieOrSeries(movieAndSeriesDetails: MovieAndSeriesDetails) {
         tint = colorOrange
     )
     Text(
-        text = String.format("%.1f", (movieAndSeriesDetails._voteAverage)),
+        text = String.format("%.1f", (movieAndSeriesDetails.voteAverage)),
         color = colorOrange
     )
 }
@@ -377,7 +396,7 @@ fun ShowButtonPlayDownloadAndShare() {
 @Composable
 fun ShowTagLine(movieAndSeriesDetails: MovieAndSeriesDetails) {
     //TODO("THIS LOGIC COULD BE IN OTHER PLACE, LIKE THE MODEL IT BELONGS?")
-    if (movieAndSeriesDetails._tagline != "") {
+    if (movieAndSeriesDetails.tagline != "") {
         Text(
             text = "Tag Line",
             style = TextStyle(
@@ -387,7 +406,7 @@ fun ShowTagLine(movieAndSeriesDetails: MovieAndSeriesDetails) {
             )
         )
         Text(
-            text = movieAndSeriesDetails._tagline,
+            text = movieAndSeriesDetails.tagline,
             style = TextStyle(
                 fontFamily = FontFamily(Font(R.font.montserrat)),
                 color = Color.White,

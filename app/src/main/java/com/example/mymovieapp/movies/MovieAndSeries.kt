@@ -1,15 +1,13 @@
 package com.example.mymovieapp.movies
 
 open class MovieAndSeries(
-    id: Int,
-    title: String,
-    url: String,
-    backdropPath: String,
-    type: String
+    open val id: Int,
+    open val title: String,
+    open val url: String,
+    open val backdropPath: String,
+    open val type: String
 ) {
-    val _id = id
-    val _title = title
-    val _url = url
-    val _backdropPath = backdropPath
-    val _type = type
+    fun isUrlValid(): Boolean {
+        return url != "default_url"
+    }
 }

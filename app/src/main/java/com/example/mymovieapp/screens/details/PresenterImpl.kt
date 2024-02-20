@@ -19,7 +19,6 @@ class PresenterImpl : DetailsContract.Presenter {
         getImagesPoster()
     }
 
-
     override fun getMovieDetails() {
 
         interaction.fetchMovieAndSeriesDetails(id, type) {

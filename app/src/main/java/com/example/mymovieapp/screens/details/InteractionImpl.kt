@@ -15,35 +15,45 @@ class InteractionImpl : DetailsContract.Model {
     override fun fetchMovieAndSeriesDetails(
         id: Int,
         type: String,
-        result: (MovieAndSeriesDetails) -> Unit
+        result: (Stated) -> Unit
     ) {
+
         scope.launch {
             if (type == "movie") {
                 val movieDetails = moviesRepository.getMovieDetails(id)
                 //TODO(AVOID TO USE !! OPERATOR IS NOT SAFE)
-                result.invoke(movieDetails!!)
-            } else {
+                if (movieDetails != null)
+                    result.invoke(Stated.Success(movieDetails))
+                else result.invoke(Stated.Loading)
+            }
+            else {
                 val seriesDetails = moviesRepository.getSeriesDetails(id)
                 //TODO(SAME AS ABOVE)
-                result.invoke(seriesDetails!!)
+                if (seriesDetails != null)
+                    result.invoke(Stated.Success(seriesDetails))
+                else result.invoke(Stated.Loading)
             }
         }
     }
 
-    override fun fetchMovieCredits(id: Int, type: String, result: (List<MovieCast>)->Unit) {
+    override fun fetchMovieCredits(id: Int, type: String, result: (List<MovieCast>) -> Unit) {
 
         scope.launch {
             if (type == "movie") {
                 val movieCredits = moviesRepository.getMovieCredits(id)
                 result.invoke(movieCredits)
             } else {
-                val seriesCredits = moviesRepository.getMovieCredits(id)
+                val seriesCredits = moviesRepository.getSeriesCredits(id)
                 result.invoke(seriesCredits)
             }
         }
     }
 
-    override fun fetchImagesPoster(id: Int, type: String, result: (List<MovieAndSeriesImagePoster>)->Unit) {
+    override fun fetchImagesPoster(
+        id: Int,
+        type: String,
+        result: (List<MovieAndSeriesImagePoster>) -> Unit
+    ) {
 
         scope.launch {
             if (type == "movie") {
@@ -55,4 +65,10 @@ class InteractionImpl : DetailsContract.Model {
             }
         }
     }
+
+}
+
+sealed class Stated() {
+    object Loading : Stated()
+    data class Success(val details: MovieAndSeriesDetails) : Stated()
 }
