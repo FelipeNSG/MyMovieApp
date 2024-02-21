@@ -69,7 +69,6 @@ fun MediaScreen(navController: NavHostController) {
     val listTopRate = remember { mutableStateOf(emptyList<Movie>()) }
     val listMostPopularSeries = remember { mutableStateOf(emptyList<Series>()) }
 
-    val presenter: HomeContract.Presenter = PresenterImpl()
     val homeView: HomeContract.View = object : HomeContract.View {
 
         override fun displayUpcomingMovies(movies: List<Movie>) {
@@ -92,7 +91,7 @@ fun MediaScreen(navController: NavHostController) {
             listMostPopularSeries.value = series
         }
     }
-    presenter.setView(homeView)
+    val presenter: HomeContract.Presenter = PresenterImpl(homeView, InteractionImpl())
 
     Scaffold(
         containerColor = containerColor,

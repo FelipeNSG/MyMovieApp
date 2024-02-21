@@ -14,13 +14,12 @@ interface HomeContract {
     }
 
     interface Presenter {
-
-        fun setView(view :View)
         fun getUpcomingMovies()
         fun getMostPopularMovies()
         fun getPlayNowMovies()
         fun getTopRateMovies()
         fun getMostPopularSeries()
+
     }
     interface Model {
         fun fetchUpcomingMovies(result: (List<Movie>) -> Unit)

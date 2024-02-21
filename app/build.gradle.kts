@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    testImplementation("junit:junit:4.12")
     val lifecycle_version = "2.7.0"
     val arch_version = "2.2.0"
 
@@ -104,4 +105,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //testing
+    testImplementation("io.mockk:mockk:1.13.9")
 }
