@@ -92,6 +92,7 @@ fun MediaScreen(navController: NavHostController) {
         }
     }
     val presenter: HomeContract.Presenter = PresenterImpl(homeView, InteractionImpl())
+    presenter.initPresenterFunctions()
 
     Scaffold(
         containerColor = containerColor,

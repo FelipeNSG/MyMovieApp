@@ -14,6 +14,7 @@ interface HomeContract {
     }
 
     interface Presenter {
+        fun initPresenterFunctions()
         fun getUpcomingMovies()
         fun getMostPopularMovies()
         fun getPlayNowMovies()

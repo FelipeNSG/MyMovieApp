@@ -5,6 +5,13 @@ class PresenterImpl(
     private val interaction: HomeContract.Model
 ) :
     HomeContract.Presenter {
+    override fun initPresenterFunctions() {
+        getUpcomingMovies()
+        getMostPopularMovies()
+        getPlayNowMovies()
+        getTopRateMovies()
+        getMostPopularSeries()
+    }
 
     override fun getUpcomingMovies() {
         interaction.fetchUpcomingMovies {
