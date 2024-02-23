@@ -74,7 +74,6 @@ fun MovieDetails(
     var movieOrSeriesDetails: Stated by remember {
         mutableStateOf(Stated.Loading)
     }
-
     var movieOrSeriesCredits: List<MovieCast> by remember {
         mutableStateOf(emptyList())
     }
@@ -83,7 +82,7 @@ fun MovieDetails(
     }
 
 
-    val presenter: DetailsContract.Presenter = PresenterImpl()
+
     val detailsView: DetailsContract.View = object : DetailsContract.View {
         override fun displayMovieDetails(stateDetails: Stated) {
             movieOrSeriesDetails = stateDetails
@@ -97,8 +96,9 @@ fun MovieDetails(
             movieOrSeriesImagesPoster = movieAndSeriesImagePoster
         }
     }
+    val presenter: DetailsContract.Presenter = PresenterImpl(detailsView, InteractionImpl())
     LaunchedEffect(Unit){
-        presenter.setView(id, type, detailsView)
+        presenter.setView(id, type)
     }
 
         when (movieOrSeriesDetails){

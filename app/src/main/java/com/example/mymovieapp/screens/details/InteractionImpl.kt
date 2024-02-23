@@ -17,7 +17,6 @@ class InteractionImpl : DetailsContract.Model {
         type: String,
         result: (Stated) -> Unit
     ) {
-
         scope.launch {
             if (type == "movie") {
                 val movieDetails = moviesRepository.getMovieDetails(id)
@@ -35,7 +34,6 @@ class InteractionImpl : DetailsContract.Model {
     }
 
     override fun fetchMovieCredits(id: Int, type: String, result: (List<MovieCast>) -> Unit) {
-
         scope.launch {
             if (type == "movie") {
                 val movieCredits = moviesRepository.getMovieCredits(id)
@@ -52,7 +50,6 @@ class InteractionImpl : DetailsContract.Model {
         type: String,
         result: (List<MovieAndSeriesImagePoster>) -> Unit
     ) {
-
         scope.launch {
             if (type == "movie") {
                 val movieCredits = moviesRepository.getMovieImagesPoster(id)

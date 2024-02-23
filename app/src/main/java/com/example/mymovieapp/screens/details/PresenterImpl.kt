@@ -1,16 +1,15 @@
 package com.example.mymovieapp.screens.details
 
-class PresenterImpl : DetailsContract.Presenter {
+class PresenterImpl(
+    private val view: DetailsContract.View,
+    private val interaction: DetailsContract.Model
 
-    private lateinit var view: DetailsContract.View
+) : DetailsContract.Presenter {
+
     private var id: Int = 0
     private var type: String = ""
 
-    private val interaction: DetailsContract.Model = InteractionImpl()
-
-
-    override fun setView(id: Int, type: String, view: DetailsContract.View) {
-        this.view = view
+    override fun setView(id: Int, type: String) {
         this.id = id
         this.type = type
 
@@ -20,7 +19,6 @@ class PresenterImpl : DetailsContract.Presenter {
     }
 
     override fun getMovieDetails() {
-
         interaction.fetchMovieAndSeriesDetails(id, type) {
             view.displayMovieDetails(it)
         }

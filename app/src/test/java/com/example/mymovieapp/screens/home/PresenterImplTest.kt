@@ -28,43 +28,6 @@ class PresenterImplTest {
     @Before
     fun setUp() {
         init(this)
-
-        /*  every {
-              interaction.fetchUpcomingMovies(capture(slotUpcomingMovies))
-          } answers {
-              slotUpcomingMovies.captured.invoke(emptyList())
-          }
-          every {
-              interaction.fetchMostPopularMovies(capture(slotMostPopular))
-          } answers {
-              slotMostPopular.captured.invoke(emptyList())
-          }
-
-          every {
-              interaction.fetchPlayNowMovies(capture(slotPlayNowMovies))
-          } answers {
-              slotPlayNowMovies.captured.invoke(emptyList())
-          }
-
-          every {
-              interaction.fetchTopRateMovies(capture(slotTopRateMovies))
-          } answers {
-              slotTopRateMovies.captured.invoke(emptyList())
-          }
-
-          every {
-              interaction.fetchMostPopularSeries(capture(slotMostPopularSeries))
-          } answers {
-              slotMostPopularSeries.captured.invoke(emptyList())
-          }
-
-
-          every { view.displayUpcomingMovies(any()) } just runs
-          every { view.displayMostPopularMovies(any()) } just runs
-          every { view.displayPlayNowMovies(any()) } just runs
-          every { view.displayTopRateMovies(any()) } just runs
-          every { view.displayMostPopularSeries(any()) } just runs*/
-
         presenter = PresenterImpl(view, interaction)
     }
 
