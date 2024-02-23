@@ -7,6 +7,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -15,8 +16,7 @@ import org.junit.Test
 class InteractionImplTest {
     private val moviesRepository: MoviesRepository = mockk()
     private lateinit var interaction: InteractionImpl
-    private var slotMovie = slot<(List<Movie>) -> Unit>()
-
+    private var slotListMovie = slot<(List<Movie>) -> Unit>()
 
     @Before
     fun setUp() {
@@ -27,19 +27,15 @@ class InteractionImplTest {
     @Test
     fun fetchUpcomingMovies() {
         runBlocking {
-
-             var movieList: List<Movie> = emptyList()
+            //arrange
             coEvery {
-                moviesRepository.getUpcomingMovies()
-            }answers {
-                movieList
+                interaction.fetchUpcomingMovies { capture(slotListMovie) }
+            } coAnswers {
+                slotListMovie.captured.invoke(emptyList())
             }
-
-            interaction.fetchUpcomingMovies {
-                print("movie size ${it.size}")
-            }
+            //act
+            launch { interaction.fetchUpcomingMovies {  print("algo ${it.size}") } }
         }
-
     }
 
     @After
