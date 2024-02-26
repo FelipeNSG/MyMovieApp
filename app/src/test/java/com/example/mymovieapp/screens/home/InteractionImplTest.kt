@@ -15,6 +15,7 @@ import org.junit.Test
 
 class InteractionImplTest {
     private lateinit var interaction: InteractionImpl
+
     private val result: List<Movie> = (
             listOf(
                 Movie(id = 0, title = "title1", url = "", backdropPath = "", type = "movie"),
@@ -35,6 +36,7 @@ class InteractionImplTest {
             )
         )
 
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -44,6 +46,7 @@ class InteractionImplTest {
     }
 
     @Test
+
     fun fetchUpcomingMovies() = runTest {
         //arrange
         coEvery {
