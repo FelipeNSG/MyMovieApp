@@ -6,6 +6,7 @@ import com.example.mymovieapp.movies.MovieCast
 import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import io.mockk.MockKAnnotations.init
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import kotlinx.coroutines.test.runTest
@@ -16,6 +17,7 @@ import org.junit.Test
 
 class InteractionImplTest {
     private lateinit var interaction: InteractionImpl
+    //TODO("RENAME, USE A MEANFUL NAME")
     private val result = MovieAndSeriesDetails(
         type = "something",
         id = 1110,
@@ -45,6 +47,7 @@ class InteractionImplTest {
         )
     )
 
+
     @Before
     fun setUp() {
         init(this)
@@ -65,6 +68,11 @@ class InteractionImplTest {
             //assertion
             Assert.assertEquals(Stated.Success(result), it)
         }
+
+        //TODO("ADD VERIFY BLOCK")
+        coVerify {
+            MoviesRepository.getMovieDetails(1110)
+        }
     }
 
     @Test
@@ -79,6 +87,14 @@ class InteractionImplTest {
         interaction.fetchMovieAndSeriesDetails(1110, "series") {
             //assertion
             Assert.assertEquals(Stated.Loading, it)
+        }
+
+        coVerify {
+            MoviesRepository.getSeriesDetails(any())
+        }
+
+        coVerify(exactly = 0) {
+            MoviesRepository.getMovieDetails(any())
         }
     }
 
@@ -125,6 +141,8 @@ class InteractionImplTest {
             //assertion
             Assert.assertEquals(imagePosterList, it)
         }
+
+
     }
 
     @Test
