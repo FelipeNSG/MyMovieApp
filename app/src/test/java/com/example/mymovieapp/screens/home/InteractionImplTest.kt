@@ -36,17 +36,14 @@ class InteractionImplTest {
             )
         )
 
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         interaction = InteractionImpl()
         mockkObject(MoviesRepository)
-
     }
 
     @Test
-
     fun fetchUpcomingMovies() = runTest {
         //arrange
         coEvery {
@@ -62,7 +59,7 @@ class InteractionImplTest {
     }
 
     @Test
-    fun fetchMostPopularMovies() = runTest {
+    fun fetchMostPopularMovies() = runTest() {
         //arrange
         coEvery {
             MoviesRepository.getPopularMovies()
@@ -117,7 +114,6 @@ class InteractionImplTest {
         }
         //act
         interaction.fetchMostPopularSeries {
-            print("hola")
             //assertion
             Assert.assertEquals(1, it.size)
         }

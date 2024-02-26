@@ -60,7 +60,6 @@ class InteractionImpl : DetailsContract.Model {
             }
         }
     }
-
 }
 
 sealed class Stated() {
