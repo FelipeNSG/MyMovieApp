@@ -124,4 +124,5 @@ class InteractionImplTest {
     fun tearDown() {
         unmockkObject(MoviesRepository)
     }
+
 }
