@@ -1,5 +1,4 @@
 package com.example.mymovieapp.data.repository
-import android.util.Log
 import com.example.mymovieapp.domain.mappers.toMovie
 import com.example.mymovieapp.domain.mappers.toMovieAndSeriesCast
 import com.example.mymovieapp.domain.mappers.toMovieAndSeriesImagePoster
@@ -19,13 +18,10 @@ import retrofit2.HttpException
 //TODO("Take a look at the result pattern")
 
 object MoviesRepository {
-
     suspend fun getPopularMovies(): List<Movie> {
         return try {
             val result = MovieClient.createMoviesService().getPopularMovies()
-            result.results?.mapNotNull { it?.toMovie() }?.apply {
-                Log.i("size", this.size.toString())
-            } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie() } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -35,9 +31,7 @@ object MoviesRepository {
     suspend fun getTopRate(): List<Movie> {
         return try {
             val result = MovieClient.createMoviesService().getTopRate()
-            result.results?.mapNotNull { it?.toMovie() }?.apply {
-                Log.i("size", this.size.toString())
-            } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie() } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -47,9 +41,7 @@ object MoviesRepository {
     suspend fun getPopularSeries(): List<Series> {
         return try {
             val result = MovieClient.createMoviesService().getPopularSeries()
-            result.results?.mapNotNull { it?.toSeries() }?.apply {
-                Log.i("size", this.size.toString())
-            } ?: emptyList()
+            result.results?.mapNotNull { it?.toSeries() } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -57,12 +49,9 @@ object MoviesRepository {
     }
 
     suspend fun getUpcomingMovies(): List<Movie> {
-
         return try {
             val result = MovieClient.createMoviesService().getUpcomingMovies()
-            result.results?.mapNotNull { it?.toMovie() }?.apply {
-                Log.i("size", this.size.toString())
-            } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie() } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -70,12 +59,9 @@ object MoviesRepository {
     }
 
     suspend fun getPlayNow(): List<Movie> {
-
         return try {
             val result = MovieClient.createMoviesService().getPlayNow()
-            result.results?.mapNotNull { it?.toMovie() }?.apply {
-                Log.i("size", this.size.toString())
-            } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie() }?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -86,7 +72,6 @@ object MoviesRepository {
         return try {
             val result = MovieClient.createMoviesService().getMovieDetails(id)
             result.toMovieDetails()
-
         } catch (ex: HttpException) {
             ex.printStackTrace()
             return null
@@ -143,5 +128,4 @@ object MoviesRepository {
             emptyList()
         }
     }
-
 }

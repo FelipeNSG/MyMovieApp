@@ -1,8 +1,7 @@
 package com.example.mymovieapp.screens.home
 
+import com.example.mymovieapp.MOCKKS
 import com.example.mymovieapp.data.repository.MoviesRepository
-import com.example.mymovieapp.movies.Movie
-import com.example.mymovieapp.movies.Series
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.mockkObject
@@ -16,25 +15,6 @@ import org.junit.Test
 class InteractionImplTest {
     private lateinit var interaction: InteractionImpl
 
-    private val result: List<Movie> = (
-            listOf(
-                Movie(id = 0, title = "title1", url = "", backdropPath = "", type = "movie"),
-                Movie(id = 0, title = "title2", url = "", backdropPath = "", type = "movie"),
-                Movie(id = 0, title = "title3", url = "", backdropPath = "", type = "movie"),
-                Movie(id = 0, title = "title4", url = "", backdropPath = "", type = "movie"),
-                Movie(id = 0, title = "title5", url = "", backdropPath = "", type = "movie")
-            )
-            )
-    private val resultSeries: List<Series> =
-        listOf(
-            Series(
-                id = 9888,
-                title = "run",
-                url = "http://www.bing.com/search?q=egestas",
-                backdropPath = "elite",
-                type = "series"
-            )
-        )
 
     @Before
     fun setUp() {
@@ -49,7 +29,7 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getUpcomingMovies()
         } coAnswers {
-            result
+            MOCKKS.resultMovieList
         }
         //act
         interaction.fetchUpcomingMovies {
@@ -64,7 +44,7 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getPopularMovies()
         } coAnswers {
-            result
+            MOCKKS.resultMovieList
         }
         //act
         interaction.fetchMostPopularMovies {
@@ -80,7 +60,7 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getPlayNow()
         } coAnswers {
-            result
+            MOCKKS.resultMovieList
         }
         //act
         interaction.fetchPlayNowMovies {
@@ -95,7 +75,7 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getTopRate()
         } coAnswers {
-            result
+            MOCKKS.resultMovieList
         }
         //act
         interaction.fetchTopRateMovies {
@@ -110,7 +90,7 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getPopularSeries()
         } coAnswers {
-            resultSeries
+            MOCKKS.resultSeriesList
         }
         //act
         interaction.fetchMostPopularSeries {

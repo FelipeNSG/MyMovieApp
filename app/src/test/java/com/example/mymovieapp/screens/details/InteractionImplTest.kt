@@ -1,9 +1,9 @@
 package com.example.mymovieapp.screens.details
 
+import com.example.mymovieapp.MOCKKS
 import com.example.mymovieapp.data.repository.MoviesRepository
 import com.example.mymovieapp.movies.MovieAndSeriesImagePoster
 import com.example.mymovieapp.movies.MovieCast
-import com.example.mymovieapp.movies.details.MovieAndSeriesDetails
 import io.mockk.MockKAnnotations.init
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,37 +17,7 @@ import org.junit.Test
 
 class InteractionImplTest {
     private lateinit var interaction: InteractionImpl
-    //TODO("RENAME, USE A MEANFUL NAME")
-    private val result = MovieAndSeriesDetails(
-        type = "something",
-        id = 1110,
-        title = "Ok",
-        genre = listOf(),
-        runtime = 120,
-        tagline = "unknown",
-        overview = "unknown",
-        posterPath = "unknown",
-        releaseDate = "unknown",
-        voteAverage = 0.0,
-        genres = listOf(),
-        numberOfSeason = 0,
-        firstAirDate = "unknown",
-        episodeRunTime = listOf()
-    )
-    private val movieListCast: List<MovieCast> = listOf(
-        MovieCast(
-            originalName = "Romeo Keller",
-            character = "homero",
-            profilePath = "unknown"
-        )
-    )
-    private val imagePosterList: List<MovieAndSeriesImagePoster> = listOf(
-        MovieAndSeriesImagePoster(
-            filePath = "default", iso6391 = "es"
-        )
-    )
-
-
+    //TODO("RENAME, USE A MEANFUL NAME"
     @Before
     fun setUp() {
         init(this)
@@ -61,17 +31,18 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getMovieDetails(any())
         } coAnswers {
-            result
+            MOCKKS.resultMovieAndSeriesDetails
         }
         //act
-        interaction.fetchMovieAndSeriesDetails(1110, "movie") {
+        interaction.fetchMovieAndSeriesDetails(10110, "movie") {
             //assertion
-            Assert.assertEquals(Stated.Success(result), it)
+            Assert.assertEquals(Stated.Success(MOCKKS.resultMovieAndSeriesDetails), it)
         }
-
-        //TODO("ADD VERIFY BLOCK")
         coVerify {
-            MoviesRepository.getMovieDetails(1110)
+            MoviesRepository.getMovieDetails(any())
+        }
+        coVerify(exactly = 0) {
+            MoviesRepository.getSeriesDetails(any())
         }
     }
 
@@ -104,12 +75,18 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getMovieCredits(any())
         } coAnswers {
-            movieListCast
+            MOCKKS.movieListCast
         }
         //act
         interaction.fetchMovieCredits(1110, "movie") {
             //assertion
-            Assert.assertEquals(movieListCast, it)
+            Assert.assertEquals(MOCKKS.movieListCast, it)
+        }
+        coVerify {
+            MoviesRepository.getMovieCredits(any())
+        }
+        coVerify(exactly = 0) {
+            MoviesRepository.getSeriesCredits(any())
         }
     }
 
@@ -119,12 +96,18 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getSeriesCredits(any())
         } coAnswers {
-            movieListCast
+            MOCKKS.movieListCast
         }
         //act
         interaction.fetchMovieCredits(1110, "series") {
             //assertion
             Assert.assertNotEquals(emptyList<MovieCast>(), it)
+        }
+        coVerify {
+            MoviesRepository.getSeriesCredits(any())
+        }
+        coVerify(exactly = 0) {
+            MoviesRepository.getMovieCredits(any())
         }
     }
 
@@ -134,15 +117,19 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getMovieImagesPoster(any())
         } coAnswers {
-            imagePosterList
+            MOCKKS.imagePosterList
         }
         //act
         interaction.fetchImagesPoster(1110, "movie") {
             //assertion
-            Assert.assertEquals(imagePosterList, it)
+            Assert.assertEquals(MOCKKS.imagePosterList, it)
         }
-
-
+        coVerify {
+            MoviesRepository.getMovieImagesPoster(any())
+        }
+        coVerify(exactly = 0) {
+            MoviesRepository.getSeriesImagesPoster(any())
+        }
     }
 
     @Test
@@ -151,12 +138,18 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getSeriesImagesPoster(any())
         } coAnswers {
-            imagePosterList
+            MOCKKS.imagePosterList
         }
         //act
         interaction.fetchImagesPoster(1110, "series") {
             //assertion
             Assert.assertNotEquals(emptyList<MovieAndSeriesImagePoster>(), it)
+        }
+        coVerify {
+            MoviesRepository.getSeriesImagesPoster(any())
+        }
+        coVerify(exactly = 0) {
+            MoviesRepository.getMovieImagesPoster(any())
         }
     }
 
