@@ -75,12 +75,12 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getMovieCredits(any())
         } coAnswers {
-            MOCKKS.movieListCast
+            MOCKKS.resultMovieListCast
         }
         //act
         interaction.fetchMovieCredits(1110, "movie") {
             //assertion
-            Assert.assertEquals(MOCKKS.movieListCast, it)
+            Assert.assertEquals(MOCKKS.resultMovieListCast, it)
         }
         coVerify {
             MoviesRepository.getMovieCredits(any())
@@ -96,7 +96,7 @@ class InteractionImplTest {
         coEvery {
             MoviesRepository.getSeriesCredits(any())
         } coAnswers {
-            MOCKKS.movieListCast
+            MOCKKS.resultMovieListCast
         }
         //act
         interaction.fetchMovieCredits(1110, "series") {

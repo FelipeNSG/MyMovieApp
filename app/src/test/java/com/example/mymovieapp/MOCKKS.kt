@@ -9,7 +9,13 @@ import com.example.mymovieapp.network.model.Dates
 import com.example.mymovieapp.network.model.MovieList
 import com.example.mymovieapp.network.model.MovieListsWithDate
 import com.example.mymovieapp.network.model.Result
+import com.example.mymovieapp.network.model.movieandseriescredit.Cast
+import com.example.mymovieapp.network.model.movieandseriescredit.MovieAndSeriesCredits
+import com.example.mymovieapp.network.model.movieandseriesimages.Backdrop
+import com.example.mymovieapp.network.model.movieandseriesimages.MovieAndSeriesImages
+import com.example.mymovieapp.network.model.movieandseriesimages.Poster
 import com.example.mymovieapp.network.model.moviedata.MovieId
+import com.example.mymovieapp.network.model.seriesdata.SeriesId
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -38,6 +44,19 @@ object MOCKKS {
         voteAverage = 9.0
 
     )
+    val resultSeriesId = SeriesId(
+        numberOfSeasons = 2,
+        backdropPath = "unknown",
+        genres = listOf(),
+        id = 1111,
+        firstAirDate = "unknown",
+        name = "unknown",
+        overview = "unknown",
+        posterPath = "unknown",
+        tagline = "unknown",
+        voteAverage = 7.7,
+        episodeRunTime = listOf()
+    )
     val movieListSuccess = MovieList(
         page = 2,
         results = listOf(
@@ -58,6 +77,13 @@ object MOCKKS {
                 voteCount = 6
             )
         ),
+        totalPages = 20,
+        totalResults = 31
+    )
+
+    val movieListNotSuccess = MovieList(
+        page = 2,
+        results = null,
         totalPages = 20,
         totalResults = 31
     )
@@ -82,6 +108,13 @@ object MOCKKS {
                 voteCount = 6,
             )
         ),
+        totalPages = 20,
+        totalResults = 31
+    )
+    val movieListWithDateNotSuccess = MovieListsWithDate(
+        dates = Dates("2024-01-01", "2024-01-01"),
+        page = 2,
+        results = null,
         totalPages = 20,
         totalResults = 31
     )
@@ -121,7 +154,44 @@ object MOCKKS {
         firstAirDate = "unknown",
         episodeRunTime = listOf()
     )
-    val movieListCast: List<MovieCast> = listOf(
+    val resultMovieAndSeriesImages = MovieAndSeriesImages(
+        backdrops = listOf(
+            Backdrop(
+                aspectRatio = 2.1,
+                filePath = "unknown",
+                height = 21,
+                iso6391 = "unknown",
+                voteAverage = 4.4,
+                voteCount = 6,
+                width = 4
+
+            )
+        ),
+        posters = listOf(
+            Poster(
+                aspectRatio = 4.4,
+                filePath = "unknown",
+                height = 3,
+                iso6391 = "unknown",
+                voteAverage = 5.8,
+                voteCount = 4,
+                width = 9
+            )
+        )
+    )
+    val resultMovieAndSeriesImagesNotSuccess = MovieAndSeriesImages(
+        backdrops = null,
+        posters = null,
+    )
+    val resultMovieAndSeriesCredits = MovieAndSeriesCredits(
+        cast = listOf(
+            Cast(character = "unknown", originalName = "unknown", profilePath = "unknown")
+        )
+    )
+    val resultMovieAndSeriesCreditsNotSuccess = MovieAndSeriesCredits(
+        cast = null
+    )
+    val resultMovieListCast: List<MovieCast> = listOf(
         MovieCast(
             originalName = "Romeo Keller",
             character = "homero",

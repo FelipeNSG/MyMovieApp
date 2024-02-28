@@ -21,7 +21,8 @@ object MoviesRepository {
     suspend fun getPopularMovies(): List<Movie> {
         return try {
             val result = MovieClient.createMoviesService().getPopularMovies()
-            result.results?.mapNotNull { it?.toMovie() } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie()
+            } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -31,7 +32,8 @@ object MoviesRepository {
     suspend fun getTopRate(): List<Movie> {
         return try {
             val result = MovieClient.createMoviesService().getTopRate()
-            result.results?.mapNotNull { it?.toMovie() } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie()
+            } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -41,7 +43,8 @@ object MoviesRepository {
     suspend fun getPopularSeries(): List<Series> {
         return try {
             val result = MovieClient.createMoviesService().getPopularSeries()
-            result.results?.mapNotNull { it?.toSeries() } ?: emptyList()
+            result.results?.mapNotNull { it?.toSeries()
+            } ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -51,7 +54,8 @@ object MoviesRepository {
     suspend fun getUpcomingMovies(): List<Movie> {
         return try {
             val result = MovieClient.createMoviesService().getUpcomingMovies()
-            result.results?.mapNotNull { it?.toMovie() } ?: emptyList()
+            result.results?.mapNotNull { it?.toMovie() }
+                ?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -61,7 +65,8 @@ object MoviesRepository {
     suspend fun getPlayNow(): List<Movie> {
         return try {
             val result = MovieClient.createMoviesService().getPlayNow()
-            result.results?.mapNotNull { it?.toMovie() }?: emptyList()
+            result.results?.mapNotNull { it?.toMovie()
+            }?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -91,7 +96,8 @@ object MoviesRepository {
     suspend fun getMovieCredits(id: Int): List<MovieCast>{
         return  try {
             val result = MovieClient.createMoviesService().getMovieCredits(id)
-            result.cast?.mapNotNull { it?.toMovieAndSeriesCast() }?: emptyList()
+            result.cast?.mapNotNull { it?.toMovieAndSeriesCast()
+            }?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -100,7 +106,8 @@ object MoviesRepository {
     suspend fun getSeriesCredits(id: Int): List<MovieCast>{
         return  try {
             val result = MovieClient.createMoviesService().getSeriesCredits(id)
-            result.cast?.mapNotNull { it?.toMovieAndSeriesCast() }?: emptyList()
+            result.cast?.mapNotNull { it?.toMovieAndSeriesCast()
+            }?: emptyList()
         } catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
@@ -110,7 +117,8 @@ object MoviesRepository {
     suspend fun getMovieImagesPoster(id: Int): List<MovieAndSeriesImagePoster>{
         return try {
             val result = MovieClient.createMoviesService().getMovieImagesPoster(id)
-            result.posters?.mapNotNull { it?.toMovieAndSeriesImagePoster() }?: emptyList()
+            result.posters?.mapNotNull { it?.toMovieAndSeriesImagePoster()
+            } ?: emptyList()
         }catch (ex: HttpException) {
             ex.printStackTrace()
             emptyList()
