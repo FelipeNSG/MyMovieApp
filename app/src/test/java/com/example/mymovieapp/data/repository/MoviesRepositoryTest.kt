@@ -80,6 +80,23 @@ class MoviesRepositoryTest {
     @Test
     fun `Given a MovieRepository service when call getTopRate() then return a List Movie `() =
         runTest {
+            val movieList = MOCKKS.movieListSuccess
+            //arrange
+            coEvery {
+                MovieClient.createMoviesService().getTopRate()
+            } returns movieList
+            //act
+            val result = MoviesRepository.getTopRate()
+            //assertion
+            coVerify(exactly = 1) { MovieClient.createMoviesService().getTopRate() }
+            Assert.assertTrue(
+                result.size == movieList.results?.size
+            )
+        }
+
+    @Test
+    fun `Given a MovieRepository service when call getTopRate() then return a emptyList `() =
+        runTest {
             val movieList = MOCKKS.movieListNotSuccess
             //arrange
             coEvery {
@@ -94,22 +111,6 @@ class MoviesRepositoryTest {
             )
         }
 
-    @Test
-    fun `Given a MovieRepository service when call getTopRate() then return a emptyList() `() =
-        runTest {
-            val movieList = MOCKKS.movieListSuccess
-            //arrange
-            coEvery {
-                MovieClient.createMoviesService().getTopRate()
-            } returns movieList
-            //act
-            val result = MoviesRepository.getTopRate()
-            //assertion
-            coVerify(exactly = 1) { MovieClient.createMoviesService().getTopRate() }
-            Assert.assertTrue(
-                result.size == movieList.results?.size
-            )
-        }
 
     @Test
     fun `Given a MovieRepository service when call getTopRate() then throws HttpException and return a emptyList`() =

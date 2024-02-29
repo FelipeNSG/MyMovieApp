@@ -133,8 +133,6 @@ fun MovieDetails(
                 }
             }
         }
-
-
 }
 
 @Composable
@@ -301,13 +299,13 @@ fun ShowDescriptionIconAndCategoryOfTheMovieOrSeries(movieAndSeriesDetails: Movi
         tint = colorGray,
         contentDescription = "Icon Category"
     )
-    if (movieAndSeriesDetails.type == "Movie" && (movieAndSeriesDetails.genre.isNotEmpty())) {
+    if (movieAndSeriesDetails.type == "movie" && (movieAndSeriesDetails.genre.isNotEmpty())) {
         Text(
             text = movieAndSeriesDetails.genre[0].name,
             color = colorGray,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
-    } else if (movieAndSeriesDetails.type == "Series" && (movieAndSeriesDetails.genres.isNotEmpty())){
+    } else if (movieAndSeriesDetails.type == "series" && (movieAndSeriesDetails.genres.isNotEmpty())){
         Text(
             text = movieAndSeriesDetails.genres[0].name,
             color = colorGray,
