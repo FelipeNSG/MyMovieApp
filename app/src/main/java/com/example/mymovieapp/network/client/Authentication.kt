@@ -9,8 +9,6 @@ class Authentication : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
 
         // request
-        val token = ""
-
         return response.request.newBuilder()
             .header("Authorization",
                 "Bearer {access token here}")
