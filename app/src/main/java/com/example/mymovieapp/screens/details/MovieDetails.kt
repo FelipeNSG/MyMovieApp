@@ -423,15 +423,16 @@ fun ShowStoryLine(storyLine: String) {
         )
         Text(
             buildAnnotatedString {
+
                 withStyle(
                     style = SpanStyle(
                         color = colorWhite,
                         fontFamily = FontFamily(Font(R.font.montserrat))
                     )
                 ) {
-                    if (storyLine.length <= 60 && storyLine.endsWith(".")) {
+                    if (storyLine.length <= 150 && storyLine.endsWith(".")) {
                         append(storyLine.plus("..."))
-                    } else append(storyLine.substring(0, 59))
+                    } else append(storyLine.substring(0, 149))
 
                 }
                 withStyle(
@@ -440,7 +441,7 @@ fun ShowStoryLine(storyLine: String) {
                         color = colorBlue
                     )
                 ) {
-                    if (storyLine.length > 60) {
+                    if (storyLine.length > 150) {
                         append(" More")
                     }
                 }

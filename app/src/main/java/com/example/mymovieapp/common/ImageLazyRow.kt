@@ -26,7 +26,7 @@ fun ImageLazyRow(movieAndSeriesImagePoster: List<MovieAndSeriesImagePoster>) {
     LazyRow(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 8.dp),
+            .padding(start = 8.dp, bottom = 5.dp),
     ) {
 
         items(movieAndSeriesImagePoster.take(10).size) { item ->
