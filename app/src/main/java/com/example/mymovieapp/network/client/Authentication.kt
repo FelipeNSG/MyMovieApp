@@ -7,7 +7,6 @@ import okhttp3.Route
 
 class Authentication : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
-
         // request
         val token = ""
 
