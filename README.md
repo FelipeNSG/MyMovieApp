@@ -23,10 +23,11 @@ This application has 3 branches each designed for a different design pattern whi
 |![](https://github.com/FelipeNSG/MyMovieApp/blob/mvp/app/src/main/java/Screenshots/ScreenshotMyMovieApp_3.png)|![](https://github.com/FelipeNSG/MyMovieApp/blob/mvp/app/src/main/java/Screenshots/Screenshot_MyMovieApp_4.png)|
 
 https://github.com/FelipeNSG/MyMovieApp/assets/150075421/0681029c-9959-4f45-b5ba-c0a3728a64c1
-
-
 https://github.com/FelipeNSG/MyMovieApp/assets/150075421/66c0f56e-b103-412f-9c76-3ad968527b73
 
+## How To Run The App
+Download the project and run it in android studio code.
+Register in The Movie Database (TMDB) copy and paste your Access Token in the project in the following path com.example.mymovieapp.network.client and run the application.
 
 
 
