@@ -30,7 +30,7 @@ https://github.com/FelipeNSG/MyMovieApp/assets/150075421/66c0f56e-b103-412f-9c76
 Download the project and run it in android studio code.
 Register in The Movie Database (TMDB) copy and paste your Access Token in the project in the following path com.example.mymovieapp.network.client and run the application.
 
-##Contact
+## Contact
 - If you any question, you can send me an email at felipe.sanchez.innotechlabs@gmail.com, I'll try to answer as quick as I can.
 
 
