@@ -21,8 +21,16 @@ This application has 3 branches each designed for a different design pattern whi
 |:-------------:|:---------------:|
 |![](https://github.com/FelipeNSG/MyMovieApp/blob/mvp/app/src/main/java/Screenshots/ScreenshotMyMovieApp.png)|![](https://github.com/FelipeNSG/MyMovieApp/blob/mvp/app/src/main/java/Screenshots/ScreenshotMymovieApp_2.png)|
 |![](https://github.com/FelipeNSG/MyMovieApp/blob/mvp/app/src/main/java/Screenshots/ScreenshotMyMovieApp_3.png)|![](https://github.com/FelipeNSG/MyMovieApp/blob/mvp/app/src/main/java/Screenshots/Screenshot_MyMovieApp_4.png)|
-## a
-https://github.com/FelipeNSG/MyMovieApp/assets/150075421/9d8c8bd6-5e02-4ff5-a886-206bb33b6532
+
+https://github.com/FelipeNSG/MyMovieApp/assets/150075421/0681029c-9959-4f45-b5ba-c0a3728a64c1
+
+
+https://github.com/FelipeNSG/MyMovieApp/assets/150075421/66c0f56e-b103-412f-9c76-3ad968527b73
+
+
+
+
+
 
 
 
