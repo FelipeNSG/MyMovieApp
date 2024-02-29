@@ -12,7 +12,8 @@ class Authentication : Authenticator {
         val token = ""
 
         return response.request.newBuilder()
-            .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMWNlYjVmN2IzNjJkMTNmM2E2MDZiM2YyNDg4MTYxNCIsInN1YiI6IjY1YWFlMTIzMzU3YzAwMDBjYmQ2ZGE5YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FgwahiZJIqrtSuCeFmWnKs49eVpZzRFNAfhoStjjb40")
+            .header("Authorization",
+                "Bearer {access token here}")
             .build()
     }
 }
